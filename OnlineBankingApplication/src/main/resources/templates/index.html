@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+  
+    <title th:text="${title}"></title>
+    <link th:href="@{'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'}" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link th:rel="stylesheet" th:href="@{'/css/style.css'}">
+    <!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script> -->
+    <link th:rel="preconnect" th:href="@{'https://fonts.googleapis.com'}">
+    <link th:rel="preconnect" th:href="@{'https://fonts.gstatic.com'}" crossorigin>
+    <link th:href="@{'https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap'}" th:rel="stylesheet">
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+</head>
+<body>
+  <!-- Navbar  -->
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: cornflowerblue;">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-bank" style="margin-right: 10px;" viewBox="0 0 16 16">
+                <path d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.5.5 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89zM3.777 3h8.447L8 1zM2 6v7h1V6zm2 0v7h2.5V6zm3.5 0v7h1V6zm2 0v7H12V6zM13 6v7h1V6zm2-1V4H1v1zm-.39 9H1.39l-.25 1h13.72z"/>
+            </svg>
+            Online Banking System
+        </a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">About Us</a>
+                 </li>
+                <li class="nav-item">
+                    <a class="nav-link text-white" href="#">Contact Us</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav  ml-auto">
+              <li class="nav-item dropdown">
+                <button class="btn  dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="false">
+                Registration
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" th:href="@{/onlinebankapplication/adminRegister}">Register As Admin</a></li>
+                  <li><a class="dropdown-item" th:href="@{/onlinebankapplication/userRegister}">Register As User</a></li>
+                </ul>
+              </li>  
+              <li class="nav-item">
+                <a class="nav-link text-white" th:href="@{/onlinebankapplication/login}">Login</a>
+            </li>
+          </ul>
+        </div>
+    </div>
+</nav>
+<!-- Caraousal Start-->
+<div class="container-fluid">
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="img-fluid"  th:src="@{/images/1.jpg}" alt="First slide">
+      <div class="carousel-caption d-none d-md-block">
+        <h1 class="ubuntu-medium">Welcome to Online Bank Management System</h1>
+        <p class="text-primary">Do a Hassle Free Transaction Using Our Application....</p>
+      </div>
+    </div>
+    <div class="carousel-item">
+      <img class="img-fluid" th:src="@{/images/2.jpg}" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="img-fluid" th:src="@{/images/3.jpg}" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only"></span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only"></span>
+  </a>
+</div>
+</div>
+<!-- Caraousal End -->
+<!-- Content 1 -->
+ <div class="container-fluid">
+  <div class="row">
+    <div class="col-8 mt-2">
+      <h1 class="display-6 ms-2">Welcome To Online Banking System</h1>
+      <p class="mr-auto ms-2"> Welcome to our cutting edge Online Banking System, where financial empowerement meets</br>
+          technological innovation. Seamlessely navigate through your financial journey with ease , as you initiate</br>
+          secure transaction , convenintly deposite funds into your accounts , and effortlessly withdraw when</br>
+          needed.</br></br>
+
+          Our User friendly interface ensures a smooth and intutive experience , giving you full control over your </br>
+          finances from the comfort of your own device. With advanced security measures in place , you can trust </br>
+          that your sensitive information is safeguarded throughout every transaction.Join us on this digita </br>
+          financial expedition and unlock a newer era of banking convenience and confidence. 
+        </p>
+        <button type="button" class="btn btn-primary ms-1">Get Started</button>
+    </div>
+    <div class="col-md-4">
+      <img th:src="@{/images/3.jpg}" class="img" alt="" width="330" height="300">
+    </div>
+  </div>
+</div>
+<!-- Content 2 -->
+<div class="container-fluid mt-5">
+  <div class="row">
+  <div class="col-md-4">
+    <img th:src="@{/images/4.jpg}" class="img" alt="" width="380" height="300">
+  </div>
+  <div class="col-8 mt-2">
+    <h1 class="display-6 ms-2">Seamlessly Effortless Financial  Management</h1>
+    <p class="mr-auto ms-2"> Discover a new level of financial control through our intutive Online Banking System. Seamlessly</br>
+        manage transaction , deposits and withdrawals with a user-friendly interface designed to </br>
+        simplify your banking experience . Whether you're transferring funds, depositing savings, or </br>
+        making withdrawals,our-platform ensures security and convenience at every step.</br></br>
+
+        Empower yourself with effortless financial management and enjoy the freedom to take charge of </br>
+        your account from the comfort of your own device . Join us in revolutionarizing the way you </br>
+        interact with your finances , as we pave the way for a more streamlined and secure banking future.
+      </p>
+      <button type="button" class="btn btn-primary ms-1">Get Started</button>
+  </div>
+</div>
+</div>
+<div class="container-fluid mt-5">
+<hr>
+</div>  
+<!-- Footer -->
+<div class="container-fluid mt-5">
+  <div class="row ms-3">
+    <div class="col-3 ms-2">
+      <div class="h5 text-primary"> Online Banking System</div>
+    </div>
+    <div class="col-2">
+      <div class="h5 text-primary"> About Us</div>
+    </div>
+    <div class="col-2">
+      <div class="h5 text-primary"> Contanct Us</div>
+    </div>
+    <div class="col-2">
+      <div class="h5 text-primary"> Careers </div>
+    </div>
+    <div class="col-2">
+      <div class="h5 text-primary"> Links </div>
+    </div>
+    <div class="col-12">
+    <hr>
+  </div>
+  <p class="text-center">@2024 Copyright Online Banking Application</p>
+  </div>
+</div>
+</div>
+<!-- Footer End -->
+</body>
+<script th:src="@{'https://code.jquery.com/jquery-3.3.1.slim.min.js'}"></script
+<script>
+  $(document).ready(function() {
+    $('#carouselExampleIndicators').carousel();
+  });
+</script>
+<script th:src="@{'https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js'}"></script>
+<script th:src="@{'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js'}"></script>
+</html>

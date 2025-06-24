@@ -1,0 +1,209 @@
+
+<html lang="en" xmlns:th="http//www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${title}"></title>
+  <link th:href="@{'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'}" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+  <link th:href="@{'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'}" rel="stylesheet">
+  <link th:href="@{'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css'}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{'/css/style.css'}">
+</head>
+
+<body>
+	<div id="loader-wrapper" style="display: none;">
+  <div id="loader"></div>
+</div>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: cornflowerblue;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-bank"
+            style="margin-right: 10px;" viewBox="0 0 16 16">
+            <path
+              d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.5.5 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89zM3.777 3h8.447L8 1zM2 6v7h1V6zm2 0v7h2.5V6zm3.5 0v7h1V6zm2 0v7H12V6zM13 6v7h1V6zm2-1V4H1v1zm-.39 9H1.39l-.25 1h13.72z" />
+          </svg>
+          Online Banking System
+        </a>
+  
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link text-white" href="#">About Us</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-white" href="#">Contact Us</a>
+            </li>
+          </ul>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link text-white" th:href="@{'/login'}">Login</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  <form method="POST"  onsubmit="saveRegistrationForm(this,event);"  enctype="multipart/form-data">
+    <div class="container">
+      <div class="row col-md-8 offset-md-2">
+        <div class="card">
+          <div class="card-header bg-primary">
+            <h2 class="text-center text-white ubuntu-regular">Admin Registration</h2>
+          </div>
+          <div class="card-body">
+              <p class="ubuntu-regular text-white"> Admin Details</p>
+              <hr>
+                <div class="form-group row">
+                  <label for="firstName" class="col-sm-2 col-form-label ubuntu-regular text-white">First Name</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" required 
+                      onchange="validateName(this);"  />
+                      <div class="valid-feedback">
+                        Please Enter the First Name
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="lastName" class="col-sm-2 col-form-label ubuntu-regular text-white">Last Name</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" onchange="validateName(this);" required
+                      />
+                      <div class="valid-feedback">
+                        Please Enter the Last Name  
+                      </div>
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="address" class="col-sm-2 col-form-label ubuntu-regular text-white">Address </label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="address" name="address"
+                      placeholder="Enter Address" onchange="validateAddress(this);" minlength="10" maxlengthlengthlength="100"/> 
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="email" class="col-sm-2 col-form-label ubuntu-regular text-white">Email</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="staticEmail" name="email" placeholder="Enter your email" onchange="validateEmail(this);" />
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="password" class="col-sm-2 col-form-label ubuntu-regular text-white">Password</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" id="password" name="password" minlength="6" maxlengthlengthlength="8" placeholder="Enter Password" onchange="validatePassword(this);"/>
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="confirmPassword" class="col-sm-2 col-form-label ubuntu-regular text-white">Confirm Password</label>
+                  <div class="col-sm-10">
+                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Enter Confirm Password" onchange="validateConfirmPassword(this);"/>
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="inputAccountNumber" class="col-sm-2 col-form-label ubuntu-regular text-white">Account Number</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="accountNumber" name="accountNumber" placeholder="Account Number" onchange="validateAccountNumber(this);"/>
+                  </div>
+                </div>
+                <div class="form-group row mt-2 dropdown">
+                  <label for="dropdownRole" class="col-sm-2 col-form-label ubuntu-regular text-white">Role</label>
+                  <div class="dropdown col-sm-10 ">
+                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th>
+                      Select Role
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <li class="dropdown-item" onclick="selectRole('Admin');">Admin</li>
+                      <li class="dropdown-item" onclick="selectRole('User');">User</li>
+                    </div>
+                    <input type="hidden" id="selectedRole" name="selectedRole"/>
+                  </div>
+                </div>
+                <div class="form-group row mt-3 ubuntu-regular ">
+                  <p class="text-white"> Personal Details</p>
+                  <hr>
+                </div>
+                <div class="form-group row mt-2 input-group date" >
+                  <label for="inputDateOfBirth" class="col-sm-2 col-form-label ubuntu-regular text-white">Date of Birth</label>
+                  <div class="col-sm-3">
+                    <input type="date" class="form-control" id="dateOfBirth" placeholder="dd/mm/yyyy" name="dateOfBirth" onchange="validateDateOfBirth(this);" onfocus="this.setAttribute('maxlength', new Date().toISOString().split('T')[0]);" />
+
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="inputMobileNo" class="col-sm-2 col-form-label ubuntu-regular text-white">Mobile No</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="mobileNo" placeholder="Mobile Number" maxlengthlength="10" onchange="validateMobileNo(this);"name="mobileNo"/>
+                  </div>
+                </div>
+                <div class="form-group mt-3">
+                  <label class="col-form-label ubuntu-regular text-white">Gender</label>
+                  <div class="form-check form-check-inline" style="margin-left:60px;">
+                      <input class="form-check-input" type="radio" name="gender" id="femaleRadio" value="female" />
+                      <label class="form-check-label ubuntu-regular" for="femaleRadio"/>Female</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="gender" id="maleRadio" value="male" />
+                      <label class="form-check-label ubuntu-regular" for="maleRadio"/>Male</label>
+                  </div>
+                </div>
+                <div class="form-group row mt-2">
+                  <label for="nationality" class="col-sm-2 col-form-label ubuntu-regular text-white">Nationality</label>
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control" id="nationality" name="nationality" minlength="2" maxlengthlengthlength="50" onchange="validateNationality(this);" placeholder="Enter the Nationality" />
+                    <div class="valid-feedback">
+                      Please Enter the Nationality
+                    </div>
+                  </div>
+                  <div class="form-group row mt-3">
+                    <label for="profilePhoto" class="col-sm-2 col-form-label ubuntu-regular text-white">Profile Photo</label>
+                    <div class="col-sm-7 userProfilePhoto mt-1">
+                    <input type="file" class="form-control-file" id="profilePhoto" name="profilePhoto" onchange="validateProfilePhoto(this);" accept="image/jpeg"/>
+                    </div>
+                  </div>
+                 
+                </div>
+                <button type="submit" class="btn btn-primary mt-4" style="margin-left:250px;" onsubmit="">Submit</button>
+                <button type="reset" class="btn btn-primary mt-4" onclick="resetRole('#dropdownMenuButton');">Reset</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+  </form>
+  <!-- Popup -->
+  <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="closeModalPopup();">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body text-center ">
+          Enter the Valid Name
+        </div>
+        <div class="modal-footer" style="padding-bottom:10px; ">
+        </div>
+      </div>
+    </div>
+  </div>
+ <input type="hidden" id="baseUrl" name="baseUrl" th:value="${baseUrl}"/>
+
+  </body>
+ 
+<script th:src="@{'/js/common.js'}"></script>
+<script th:src="@{'/js/adminRegister.js'}"></script>
+<script th:src="@{'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js'}"></script>
+<script th:src="@{'https://code.jquery.com/jquery-3.2.1.slim.min.js'}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script th:src="@{'https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js'}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script th:src="@{'https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js'}" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script th:src="@{'https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js'}" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+<script th:src="@{'https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js'}"></script>
+
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http//www.thymeleaf.org">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+    <link th:href="@{'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css'}" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <link th:href="@{'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'}" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{'/css/style.css'}">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: cornflowerblue;">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">
+        <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-bank"
+          style="margin-right: 10px;" viewBox="0 0 16 16">
+          <path
+            d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.5.5 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89zM3.777 3h8.447L8 1zM2 6v7h1V6zm2 0v7h2.5V6zm3.5 0v7h1V6zm2 0v7H12V6zM13 6v7h1V6zm2-1V4H1v1zm-.39 9H1.39l-.25 1h13.72z" />
+        </svg>
+        Online Banking System
+      </a>
+
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">About Us</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link text-white" href="#">Contact Us</a>
+          </li>
+        </ul>
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <a class="nav-link text-white" href="/login.html">Login</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <!-- method="POST" action="/registerUser" -->
+<form method="POST" action="/registerUser" id="#userRegisterId" onsubmit="submitUserRegisteredData()" enctype="multipart/form-data">
+  <div class="container">
+    <div class="row col-md-8 offset-md-2">
+      <div class="card">
+        <div class="card-header bg-primary">
+          <h2 class="text-center text-white ubuntu-regular">User Registration</h2>
+        </div>
+        <div class="card-body">
+          <form class="needs-validation" novalidate>
+            <p class="ubuntu-regular text-white"> User Details</p>
+            <hr>
+            <form class="needs-validation" novalidate>
+              <div class="form-group row">
+                <label for="firstName" class="col-sm-2 col-form-label ubuntu-regular text-white">First Name</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name"
+                    required>
+                  <div class="valid-feedback">
+                    Please Enter First Name
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="lastName" class="col-sm-2 col-form-label ubuntu-regular text-white">Last Name</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name"
+                    required>
+                  <div class="valid-feedback">
+                    Please Enter Last Name
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="address" class="col-sm-2 col-form-label ubuntu-regular text-white">Address </label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="address" name="address"
+                    placeholder="Enter Address" required>
+                  <div class="valid-feedback">
+                    Please Enter Address
+                  </div>
+                </div>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="staticEmail" class="col-sm-2 col-form-label ubuntu-regular text-white">Email</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="staticEmail" name="email" placeholder="Enter your email" value="">
+                </div>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="password" class="col-sm-2 col-form-label ubuntu-regular text-white">Password</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" id="password" name="password" placeholder="Enter Password">
+                </div>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="confirmPassword" class="col-sm-2 col-form-label ubuntu-regular text-white">Confirm Password</label>
+                <div class="col-sm-10">
+                  <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" placeholder="Enter Confirm Password">
+                </div>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="inputAccountNumber" class="col-sm-2 col-form-label ubuntu-regular text-white">Account Number</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="accountNo" name="accountNo" placeholder="Account Number">
+                </div>
+              </div>
+              <div class="form-group row mt-2 dropdown">
+                <label for="dropdownRole" class="col-sm-2 col-form-label ubuntu-regular text-white">Role</label>
+                <div class="dropdown col-sm-10 ">
+                  <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Select Role
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li class="dropdown-item" onclick="selectRole('Admin');">Admin</li>
+                    <li class="dropdown-item" onclick="selectRole('User');">User</li>
+                  </div>
+                  <input type="hidden" id="selectedRole" name="selectedRole"/>
+                </div>
+              </div>  
+              <div class="form-group row mt-3 ubuntu-regular ">
+                <p class="text-white"> Personal Details</p>
+                <hr>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="inputDateOfBirth" class="col-sm-2 col-form-label ubuntu-regular text-white">Date of Birth</label>
+                <div class="col-sm-3">
+                  <input type="date" class="form-control" id="dateOfBirth" placeholder="Date of Birth" name="dateOfBirth">
+                </div>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="inputMobileNo" class="col-sm-2 col-form-label ubuntu-regular text-white">Mobile No</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="mobileNo" placeholder="Mobile Number" name="mobileNo">
+                </div>
+              </div>
+              <div class="form-group mt-3">
+                <label class="col-form-label ubuntu-regular text-white">Gender</label>
+                <div class="form-check form-check-inline" style="margin-left:60px;">
+                    <input class="form-check-input" type="radio" name="gender" id="femaleRadio" value="female">
+                    <label class="form-check-label ubuntu-regular" for="femaleRadio">Female</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" name="gender" id="maleRadio" value="male">
+                    <label class="form-check-label ubuntu-regular" for="maleRadio">Male</label>
+                </div>
+              </div>
+              <div class="form-group row mt-2">
+                <label for="nationality" class="col-sm-2 col-form-label ubuntu-regular text-white">Nationality</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="nationality" name="nationality" placeholder="Enter the Nationality"
+                    required>
+                  <div class="valid-feedback">
+                    Please Enter the Nationality
+                  </div>
+                </div>
+                <div class="form-group row mt-3">
+                  <label for="profilePhoto" class="col-sm-2 col-form-label ubuntu-regular text-white">Profile Photo</label>
+                  <div class="col-sm-4 userProfilePhoto mt-1">
+                  <input type="file" class="form-control-file" id="profilePhoto" name="profilePhoto" accept="image/*">
+                  </div>
+                </div>
+                <!-- <button type="submit" class="btn btn-primary">Upload</button> -->
+              </div>
+              <button type="submit" class="btn btn-primary mt-4" style="margin-left:250px;">Submit</button>
+              <button type="reset" class="btn btn-primary mt-4">Reset</button>
+
+        </div>
+        
+        <!-- <button type="submit" class="btn btn-primary mt-3">Login</button> -->
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</form>
+</body>
+<script th:src="@{'/js/common.js'}"></script>
+<script th:src="@{'https://code.jquery.com/jquery-3.2.1.slim.min.js'}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script th:src="@{'https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js'}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script th:src="@{'https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js'}" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</html>

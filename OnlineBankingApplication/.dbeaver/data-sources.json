@@ -1,0 +1,35 @@
+{
+	"folders": {},
+	"connections": {
+		"mysql8-193edeb6fdc-4db123a1916e6a9a": {
+			"provider": "mysql",
+			"driver": "mysql8",
+			"name": "banking_app",
+			"save-password": true,
+			"configuration": {
+				"host": "localhost",
+				"port": "3306",
+				"database": "banking_app",
+				"url": "jdbc:mysql://localhost:3306/banking_app",
+				"configurationType": "MANUAL",
+				"home": "C:\\Program Files\\MySQL\\MySQL Server 8.0",
+				"type": "dev",
+				"auth-model": "native"
+			}
+		}
+	},
+	"connection-types": {
+		"dev": {
+			"name": "Development",
+			"color": "255,255,255",
+			"description": "Regular development database",
+			"auto-commit": true,
+			"confirm-execute": false,
+			"confirm-data-change": false,
+			"smart-commit": false,
+			"smart-commit-recover": false,
+			"auto-close-transactions": true,
+			"close-transactions-period": 1800
+		}
+	}
+}
