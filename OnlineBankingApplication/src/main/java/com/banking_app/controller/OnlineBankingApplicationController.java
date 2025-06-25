@@ -96,8 +96,6 @@ public class OnlineBankingApplicationController {
 			returnStatus = ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email does not exist.");
 		}
 		return returnStatus;
-		
-		
 	}
 	
 	
@@ -111,8 +109,6 @@ public class OnlineBankingApplicationController {
 			returnStatus = ResponseEntity.status(HttpStatus.NOT_FOUND).body("Account No exist.");
 		}
 		return returnStatus;
-		
-		
 	}
 	
 	@GetMapping("isMobileNoAlreadyExists")
@@ -127,6 +123,4 @@ public class OnlineBankingApplicationController {
 		return returnStatus;
 	}
 	
-	
-	 
 }
