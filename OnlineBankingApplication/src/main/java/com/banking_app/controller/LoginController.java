@@ -96,7 +96,8 @@ public class LoginController {
 		return "forgotPassword";
 	}
 	
-	@GetMapping("loadOTPPage")
+//	@PostMapping("loadOTPPage")
+	@RequestMapping(method= {RequestMethod.GET,RequestMethod.POST},value="loadOTPPage")
 	public String loadOTPPage(Model model,HttpServletRequest request) throws MessagingException{
 		String fullUrl = request.getRequestURL().toString();
 		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
@@ -109,9 +110,17 @@ public class LoginController {
 		mailSenderDTO.setMessage("Hello");
 		mailSenderDTO.setBody("HELLO");
 		mailSenderDTO.setSubject("Hello");
-//		loginServiceImpl.sendMailForOTP(mailSenderDTO);
+		loginServiceImpl.sendMailForOTP(mailSenderDTO);
 		return "loadOTP";
 //		return "redirect:loadOTP";
 
 	}
+	
+	@PostMapping("validateOTP")
+	public ResponseEntity<String> validateOTP(@RequestBody Map <String, String> otp){
+		String otpValue=otp.get("otp");
+		Boolean validOTP = loginServiceImpl.isValidOTP(otpValue);
+		return validOTP==true?ResponseEntity.ok("OTP Validated Successfully"):ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid OTP");
+	}
+	
 }

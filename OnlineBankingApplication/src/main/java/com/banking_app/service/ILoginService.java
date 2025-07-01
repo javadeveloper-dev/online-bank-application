@@ -10,4 +10,7 @@ public interface ILoginService {
 	Boolean isPasswordExistsOrNot(LoginDTO loginDTO);
 	
 	public void sendMailForOTP(MailSenderDTO sendMailDTO) throws MessagingException;
+
+	Boolean isValidOTP(String otp);
+
 }

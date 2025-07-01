@@ -382,14 +382,65 @@ document.getElementById("forgotPasswordId").addEventListener("click",async ()=>{
 }
 
 
+function validateOTP(event){
+	event.preventDefault();
+	let otp=document.getElementById("otpId");
+	let validateOTP=document.getElementById("validateOTP");
+	if(otp.value.trim()==='' || otp.value.length!==4){
+        validateOTP.innerText="Please Enter OTP...";
+        validateOTP.classList="text-danger";
+        otp.style.border="1px solid red";
+		const countdownElement = document.getElementById("otpTimer");
+        otp.focus();
+        return ;
+	}
+	// For validating OTP
+	const options = {
+		method:"POST",
+		header:{
+			'Content-type':'application/json'
+		},
+		body:JSON.stringify({otp:otp})
+	};
+	var urlForOTPValidate=baseUrl+"validateOTP";
+	const response=fetch(urlForOTPValidate , options);
+}
 function validateEmailAndGetOTP(event){
+	event.preventDefault();
 	let emailElement=document.getElementById("emailId");
 	validateEmailForLogin(emailElement,event);
 	console.log("Email validated Successfully...");
 	window.location.href = baseUrl + "loadOTPPage";
 }
 
+function startCountdown(durationInSeconds) {
+    let timer = durationInSeconds;
+    const countdownElement = document.getElementById("otpTimer");
+
+    const interval = setInterval(() => {
+        const seconds = timer % 60;
+
+        countdownElement.textContent = `Time remaining: ${seconds < 10 ? '0' : ''}${seconds} seconds`;
+
+        if (timer <= 0) {
+            clearInterval(interval);
+            countdownElement.textContent = "OTP expired. Please request a new OTP.";
+			}
+
+        timer--;
+    }, 1000);
+}
+
+window.onload = function() {
+	const currentPage = window.location.pathname; 
+	  if (currentPage.includes("loadOTPPage")) { 
+	      startCountdown(30); 
+	  }
+};
+
+
 window.validateEmailForLogin = validateEmailForLogin;
 window.validateEmailAndGetOTP = validateEmailAndGetOTP;
 
 
+window.validateOTP=validateOTP;

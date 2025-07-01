@@ -58,16 +58,17 @@ xmlns:th="http//www.thymeleaf.org">
                     <h2 class="text-center text-white"> Forgot Password</h2>
                 </div>
                 <div class="card-body">
-                    <form method="POST"  onsubmit="return validateEmailAndGetOTP(event);">
+                    <form method="POST"  onsubmit="validateOTP(event);">
 						<div id="loaderOverlay" class="loader-overlay d-none">
     						<div class="loader-spinner"></div>
 						</div>
                         <div class="form-group">
                             <label for="exampleInputOTP1" class="text-white">Enter the OTP</label>
-                            <input type="text" class="form-control" onchange="validateOTP(this);" name="otp" id="otpId" aria-describedby="emailHelp" placeholder="Enter OTP">
+                            <input type="text" class="form-control"  name="otp" id="otpId" aria-describedby="emailHelp" placeholder="Enter OTP">
                           	<p id="validateOTP"></p>
                          </div>
-                         <p class="text-white">Enter the OTP immediately.OTP is expired after 60 seconds.</p>
+                         <p class="text-white">Enter the OTP immediately.OTP is expired after 30 seconds.</p>
+                      	<p id="otpTimer" class="text-white">
                         </div>
                          <div class="d-flex justify-content-between mt-n2" style="position: relative; top: -10px;">
             					<button type="button" class="btn btn-primary " onclick="resetLoginForm();"><a th:href="@{${baseUrlForLogin}+'login'}" class="text-white" style="cursor:pointer; text-decoration: none;">
@@ -87,7 +88,7 @@ xmlns:th="http//www.thymeleaf.org">
 <input type="hidden" id="baseUrl" name="baseUrl" th:value="${baseUrl}"/>
 <input type="hidden" id="isEmailValidate" value=""/>
 </body>
-<script th:src="@{'/js/login.js'}"></script>
+<script type="module" th:src="@{'/js/login.js'}"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -25,6 +25,8 @@ public class LoginServiceImpl implements ILoginService {
 	@Autowired
 	private JavaMailSender javaMailSender;
 	
+	private String otp;
+	
 	@Override
 	public Boolean isPasswordExistsOrNot(LoginDTO loginDTO) {
 		String email=loginDTO.getEmail();
@@ -42,6 +44,7 @@ public class LoginServiceImpl implements ILoginService {
          helper.setTo(sendMailDTO.getTo());
          helper.setSubject("Email Verification OTP");
          String otp=CommonUtil.generateOTP();
+         this.otp=otp;
          String htmlSubject = 
         		    "<!DOCTYPE html>" +
         		    "<html>" +
@@ -76,5 +79,10 @@ public class LoginServiceImpl implements ILoginService {
          javaMailSender.send(mimeMessage);
 	}
 
+
+	@Override
+	public Boolean isValidOTP(String otp) {
+		return this.otp.equals(otp);
+	}
 	
 }
