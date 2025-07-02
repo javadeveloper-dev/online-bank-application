@@ -384,9 +384,9 @@ document.getElementById("forgotPasswordId").addEventListener("click",async ()=>{
 
 function validateOTP(event){
 	event.preventDefault();
-	let otp=document.getElementById("otpId");
+	let otp=document.getElementById("otpId").value;
 	let validateOTP=document.getElementById("validateOTP");
-	if(otp.value.trim()==='' || otp.value.length!==4){
+	if(otp.trim()==='' || otp.length!==4){
         validateOTP.innerText="Please Enter OTP...";
         validateOTP.classList="text-danger";
         otp.style.border="1px solid red";
@@ -397,7 +397,7 @@ function validateOTP(event){
 	// For validating OTP
 	const options = {
 		method:"POST",
-		header:{
+		headers:{
 			'Content-type':'application/json'
 		},
 		body:JSON.stringify({otp:otp})

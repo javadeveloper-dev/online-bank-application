@@ -116,7 +116,7 @@ public class LoginController {
 
 	}
 	
-	@PostMapping("validateOTP")
+	@PostMapping(value="validateOTP",consumes=org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> validateOTP(@RequestBody Map <String, String> otp){
 		String otpValue=otp.get("otp");
 		Boolean validOTP = loginServiceImpl.isValidOTP(otpValue);
