@@ -98,6 +98,7 @@ async function validatePasswordForLogin(passwordElement) {
 		loaderOverlay.classList.add("d-none");
 		isPasswordValidateElement.value="false";
 		return false;
+		
 	}
 	if (password==='') {
 		passwordElement.value = "";
@@ -187,20 +188,6 @@ async function validatePasswordForLogin(passwordElement) {
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 function validateUserNameAndPassword(userNameId, passwordId) {
 	var userName = document.getElementById(userNameId);
@@ -382,7 +369,7 @@ document.getElementById("forgotPasswordId").addEventListener("click",async ()=>{
 }
 
 
-function validateOTP(event){
+async function validateOTP(event){
 	event.preventDefault();
 	let otp=document.getElementById("otpId").value;
 	let validateOTP=document.getElementById("validateOTP");
@@ -403,20 +390,45 @@ function validateOTP(event){
 		body:JSON.stringify({otp:otp})
 	};
 	var urlForOTPValidate=baseUrl+"validateOTP";
-	const response=fetch(urlForOTPValidate , options);
+	const response=await fetch(urlForOTPValidate , options);
+	if(response.status===200){
+		window.location.href=baseUrl+"forgotPassword";
+			
+	}else{
+		validateOTP.innerText="Entered OTP is Incorrect...";
+        validateOTP.classList="text-danger";
+        otp.style.border="1px solid red";
+        otp.focus();
+        return;		
+	}
+	console.log(response);
 }
-function validateEmailAndGetOTP(event){
+async function validateEmailAndGetOTP(event){
+	//add loader 	
+	loaderOverlay.classList.remove("d-none");
 	event.preventDefault();
 	let emailElement=document.getElementById("emailId");
 	validateEmailForLogin(emailElement,event);
 	console.log("Email validated Successfully...");
-	window.location.href = baseUrl + "loadOTPPage";
+	const options = {
+		method:"POST",
+		headers:{
+			'Content-type':'application/json'
+		},
+		body:JSON.stringify({email:emailElement.value})
+	};
+	var urlForSendOTP=baseUrl+"sendOTP";
+	const response=await fetch(urlForSendOTP , options);
+	if(response.status===200){
+		window.location.href =baseUrl+"loadOTPPage";
+		loader.addClass("d-none");
+	}
 }
 
 function startCountdown(durationInSeconds) {
     let timer = durationInSeconds;
     const countdownElement = document.getElementById("otpTimer");
-
+	const otpElement = document.getElementById("otpId");
     const interval = setInterval(() => {
         const seconds = timer % 60;
 
@@ -424,11 +436,114 @@ function startCountdown(durationInSeconds) {
 
         if (timer <= 0) {
             clearInterval(interval);
-            countdownElement.textContent = "OTP expired. Please request a new OTP.";
+			//make countdowElement.textContent as hyperlink to request new OTP
+		//	countdownElement.innerHTML = `<a href="${baseUrl}requestNewOTP" class="text-danger">Request New OTP</a>`;
+			countdownElement.innerHTML = `<a href="${baseUrl}loadOTPPage" class="text-danger">Request New OTP</a>`;
+			otpElement.innerHtML = "";
+			otpElement.readOnly = true;
+			return;
 			}
 
         timer--;
     }, 1000);
+}
+
+
+async function validatePasswordForReset(passwordElement){
+	
+		const regexForPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()<>:]).{6,12}$/
+		let password = passwordElement.value.trim();
+		let validatePassword = document.getElementById("validatePassword");
+		
+		// Js Side Validation
+		
+		if (password==='') {
+			passwordElement.value = "";
+			validatePassword.innerText = "Please Enter Password...";
+			validatePassword.classList = "text-danger";
+			validatePassword.style.border = "1px solid red";
+			loaderOverlay.classList.add("d-none");
+			isPasswordValidateElement.value="false";
+			passwordElement.focus();
+			return false;
+		}else if (password.length < 6) {
+			passwordElement.value = "";
+			validatePassword.innerText = "Minimum Password Length is 6";
+			validatePassword.classList = "text-danger";
+			validatePassword.style.border = "1px solid red";
+			loaderOverlay.classList.add("d-none");
+			isPasswordValidateElement.value="false";
+			passwordElement.focus();
+			return false;
+		} else if (password.length > 12) {
+			passwordElement.value = "";
+			validatePassword.innerText = "Maximum Password length is 12";
+			validatePassword.classList = "text-danger";
+			passwordElement.style.border = "1px solid red";
+			passwordElement.focus();
+			loaderOverlay.classList.add("d-none");
+			isPasswordValidateElement.value="false";
+			return false;
+		} else {
+			validatePassword.innerText = "";
+			validatePassword.classList.remove("text-danger");
+			passwordElement.style.border = "";
+			validatePassword.style="";
+			isPasswordValidateElement.value="false";
+		}
+
+		if (regexForPassword.test(password) == false) {
+			passwordElement.value = "";
+			validatePassword.innerText = "Please Enter Valid Password...";
+			validatePassword.classList = "text-danger";
+			passwordElement.style.border = "1px solid red";
+			loaderOverlay.classList.add("d-none");
+			passwordElement.focus();
+			isPasswordValidateElement.value="false";
+			return false;
+		} else {
+			validatePassword.innerText = "";
+			validatePassword.classList.remove("text-danger");
+			passwordElement.style.border = "";
+			isPasswordValidateElement.value="true";
+		}
+
+		//Server side validation
+		// Java Side Validation.
+		
+		var mainUrl = `${baseUrl}saveNewPassword`;
+		const resetPasswordData = JSON.stringify({
+			password: password
+		});
+		const options = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: resetPasswordData
+		};
+
+		const response = await fetch(mainUrl, options);
+		if (response.status !== 200) {
+			passwordElement.value = "";
+			validatePassword.innerText = "Entered Password Does Not Exists";
+			validatePassword.classList = "text-danger";
+			passwordElement.style.border = "1px solid red";
+			passwordElement.focus();
+			isPasswordValidateElement.value="false";
+			return false;
+		} else {
+			validatePassword.innerText = "";
+			validatePassword.classList.remove("text-danger");
+			passwordElement.style.border = "none";
+			loaderOverlay.classList.add("d-none");
+			isPasswordValidateElement.value="true";
+			return true;
+		}
+} 
+function validateRePassword(rePasswordElement){
+	
+	console.log(rePasswordElement)
 }
 
 window.onload = function() {
@@ -441,6 +556,9 @@ window.onload = function() {
 
 window.validateEmailForLogin = validateEmailForLogin;
 window.validateEmailAndGetOTP = validateEmailAndGetOTP;
-
+window.generateCaptcha =generateCaptcha ;
 
 window.validateOTP=validateOTP;
+window.validateRePassword=validateRePassword;
+window.validatePasswordForLogin=validatePasswordForLogin;
+window.validatePasswordForReset=validatePasswordForReset;

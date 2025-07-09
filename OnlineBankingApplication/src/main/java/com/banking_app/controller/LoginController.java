@@ -46,6 +46,8 @@ public class LoginController {
 	@Autowired(required = true)
 	private IAdminRegistrationService adminRegistrationServiceImpl;
 	
+	private String email;
+	
 	@CrossOrigin(origins = "*")
 	@RequestMapping(value="isEmailPresentForLogin",method=RequestMethod.POST,consumes=org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 //	@PostMapping("isEmailPresentForLogin")
@@ -93,7 +95,7 @@ public class LoginController {
 		String baseUrlForLogin=fullUrl.substring(0,fullUrl.lastIndexOf("-"))+"/";
 		model.addAttribute("baseUrl",baseUrl);
 		model.addAttribute("baseUrlForLogin",baseUrlForLogin);
-		return "forgotPassword";
+		return "loadForgotPasswordForOTP";
 	}
 	
 //	@PostMapping("loadOTPPage")
@@ -104,13 +106,6 @@ public class LoginController {
 		String baseUrlForLogin=fullUrl.substring(0,fullUrl.lastIndexOf("-"))+"/";
 		model.addAttribute("baseUrl",baseUrl);
 		model.addAttribute("baseUrlForLogin",baseUrlForLogin);
-		MailSenderDTO mailSenderDTO=new MailSenderDTO();
-		mailSenderDTO.setFrom("tayadepankaj1999@gmail.com");
-		mailSenderDTO.setTo("tayadepankaj1999@gmail.com");
-		mailSenderDTO.setMessage("Hello");
-		mailSenderDTO.setBody("HELLO");
-		mailSenderDTO.setSubject("Hello");
-		loginServiceImpl.sendMailForOTP(mailSenderDTO);
 		return "loadOTP";
 //		return "redirect:loadOTP";
 
@@ -123,4 +118,33 @@ public class LoginController {
 		return validOTP==true?ResponseEntity.ok("OTP Validated Successfully"):ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid OTP");
 	}
 	
+	
+	@PostMapping(value="sendOTP",consumes=org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> sendOTP(@RequestBody Map <String, String> email) throws MessagingException{
+		String emailData=email.get("email");
+		MailSenderDTO mailSenderDTO=new MailSenderDTO();
+		mailSenderDTO.setFrom("tayadepankaj1999@gmail.com");
+		mailSenderDTO.setTo(emailData);
+		mailSenderDTO.setMessage("Hello");
+		mailSenderDTO.setBody("HELLO");
+		mailSenderDTO.setSubject("Hello");
+		try {
+			loginServiceImpl.sendMailForOTP(mailSenderDTO);
+		}catch (Exception e) {
+			e.printStackTrace();
+			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in sending OTP");
+		}
+		this.email= emailData;
+		return ResponseEntity.ok("OTP sent successfully to "+emailData);
+	}
+	
+	@GetMapping("forgotPassword")
+	public String forgotPassword(Model model,HttpServletRequest request){
+		String fullUrl = request.getRequestURL().toString();
+		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
+		String baseUrlForLogin=fullUrl.substring(0,fullUrl.lastIndexOf("-"))+"/";
+		model.addAttribute("baseUrl",baseUrl);
+		model.addAttribute("baseUrlForLogin",baseUrlForLogin);
+		return "loadForgotPassword";
+	}
 }
