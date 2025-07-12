@@ -408,7 +408,6 @@ async function validateEmailAndGetOTP(event){
 	loaderOverlay.classList.remove("d-none");
 	event.preventDefault();
 	let emailElement=document.getElementById("emailId");
-	validateEmailForLogin(emailElement,event);
 	console.log("Email validated Successfully...");
 	const options = {
 		method:"POST",
@@ -429,18 +428,22 @@ function startCountdown(durationInSeconds) {
     let timer = durationInSeconds;
     const countdownElement = document.getElementById("otpTimer");
 	const otpElement = document.getElementById("otpId");
-    const interval = setInterval(() => {
+
+	const interval = setInterval(() => {
         const seconds = timer % 60;
 
         countdownElement.textContent = `Time remaining: ${seconds < 10 ? '0' : ''}${seconds} seconds`;
 
         if (timer <= 0) {
             clearInterval(interval);
-			//make countdowElement.textContent as hyperlink to request new OTP
-		//	countdownElement.innerHTML = `<a href="${baseUrl}requestNewOTP" class="text-danger">Request New OTP</a>`;
 			countdownElement.innerHTML = `<a href="${baseUrl}loadOTPPage" class="text-danger">Request New OTP</a>`;
 			otpElement.innerHtML = "";
-			otpElement.readOnly = true;
+			otpElement.readOnly = true;	
+			const nextButton = document.querySelector('button[type="submit"].btn-primary');
+	        if (nextButton) {
+                nextButton.disabled = true; 
+				nextButton.classList.add('disabled')
+            }
 			return;
 			}
 
@@ -454,11 +457,14 @@ async function validatePasswordForReset(passwordElement){
 		const regexForPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()<>:]).{6,12}$/
 		let password = passwordElement.value.trim();
 		let validatePassword = document.getElementById("validatePassword");
+		let rePasswordField=document.getElementById("rePasswordId");
+		
 		
 		// Js Side Validation
 		
 		if (password==='') {
 			passwordElement.value = "";
+			rePasswordField.disabled = true;
 			validatePassword.innerText = "Please Enter Password...";
 			validatePassword.classList = "text-danger";
 			validatePassword.style.border = "1px solid red";
@@ -467,6 +473,7 @@ async function validatePasswordForReset(passwordElement){
 			passwordElement.focus();
 			return false;
 		}else if (password.length < 6) {
+			rePasswordField.disabled = true;
 			passwordElement.value = "";
 			validatePassword.innerText = "Minimum Password Length is 6";
 			validatePassword.classList = "text-danger";
@@ -476,6 +483,7 @@ async function validatePasswordForReset(passwordElement){
 			passwordElement.focus();
 			return false;
 		} else if (password.length > 12) {
+			rePasswordField.disabled = true;
 			passwordElement.value = "";
 			validatePassword.innerText = "Maximum Password length is 12";
 			validatePassword.classList = "text-danger";
@@ -490,9 +498,11 @@ async function validatePasswordForReset(passwordElement){
 			passwordElement.style.border = "";
 			validatePassword.style="";
 			isPasswordValidateElement.value="false";
+			rePasswordField.disabled = false;
 		}
 
 		if (regexForPassword.test(password) == false) {
+			rePasswordField.disabled = true;
 			passwordElement.value = "";
 			validatePassword.innerText = "Please Enter Valid Password...";
 			validatePassword.classList = "text-danger";
@@ -506,12 +516,14 @@ async function validatePasswordForReset(passwordElement){
 			validatePassword.classList.remove("text-danger");
 			passwordElement.style.border = "";
 			isPasswordValidateElement.value="true";
+			rePasswordField.disabled = false;
+			
 		}
 
 		//Server side validation
 		// Java Side Validation.
 		
-		var mainUrl = `${baseUrl}saveNewPassword`;
+		/*var mainUrl = `${baseUrl}saveNewPassword`;
 		const resetPasswordData = JSON.stringify({
 			password: password
 		});
@@ -539,11 +551,25 @@ async function validatePasswordForReset(passwordElement){
 			loaderOverlay.classList.add("d-none");
 			isPasswordValidateElement.value="true";
 			return true;
-		}
+		}*/
 } 
-function validateRePassword(rePasswordElement){
-	
-	console.log(rePasswordElement)
+function validateRePassword(){
+	const password= document.getElementById("passwordId").value.trim();
+	const rePassword=document.getElementById("rePasswordId").value.trim();
+	let validateRePassword = document.getElementById("validateRePassword");
+	if(rePassword===""){
+		validateRePassword.innerHTML="Please Re Enter Password.";
+		validateRePassword.classList.add("text-danger");
+		return false;
+	}else if(password!==rePassword){
+		validateRePassword.innerHTML="Both Password are not match. Enter correct Password.";
+		validateRePassword.classList.add("text-danger");
+		return false;
+	}else{
+		validateRePassword.innerHTML="";
+		validateRePassword.classList.remove("text-danger");
+		return true;
+	}
 }
 
 window.onload = function() {
