@@ -330,6 +330,7 @@ function validateCaptcha(captchaId){
 
 
 function login(emailId,passwordId,captchaId,event){
+    loaderOverlay.classList.add("d-none");
 	var emailElement=document.getElementById(emailId);
 	var passwordElement=document.getElementById(passwordId);
 	if(isEmailValidateElement.value==="false" || isEmailValidateElement.value===""){
@@ -349,10 +350,10 @@ function login(emailId,passwordId,captchaId,event){
 	$("#exampleModalCenter").modal('show');
 		setTimeout(() => {
 			//Add link redirect to home page
+			  loaderOverlay.classList.add("d-none");
 	          window.location.href = baseUrlForLogin + "login";
 			   }
-			 , 2000); // Redirect after 2 seconds
-    loaderOverlay.classList.add("d-none");
+			 , 5000); // Redirect after 2 seconds
 }
 
 
