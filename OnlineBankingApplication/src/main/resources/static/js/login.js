@@ -344,7 +344,7 @@ function login(emailId,passwordId,captchaId,event){
 		event.preventDefault();
 		return ;
 	}
-	modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Password Reset Successfully. Redirecting to Login Page...";
+	modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Loggin Successful Redirecting to Home Page...";
 	modalPopup.children[0].childNodes[1].childNodes[3].classList="text-success text-center";
 	$("#exampleModalCenter").modal('show');
 		setTimeout(() => {
