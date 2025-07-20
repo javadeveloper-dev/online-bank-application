@@ -7,6 +7,12 @@ let isEmailValidateElement=document.getElementById("isEmailValidate");
 let isPasswordValidateElement=document.getElementById("isPasswordValidate");
 let isCaptchaValidateElement=document.getElementById("isCaptchValidate");
 var baseUrl = document.getElementById("baseUrl").value;
+//add null check for baseUrlForLogin	
+
+var baseUrlForLogin;
+if(document.getElementById("baseUrlForLogin")!==null){
+    baseUrlForLogin = document.getElementById("baseUrlForLogin").value;
+}	
 //document.addEventListener("DOMContentLoaded",generateCaptcha());
 async function validateEmailForLogin(emailElement,event) {
 	
@@ -74,9 +80,11 @@ async function validateEmailForLogin(emailElement,event) {
 		validateEmail.style="";
 		loaderOverlay.classList.add("d-none");
 		isEmailValidateElement.value="true";
+		
 		return true;
 	}
 }
+
 
 async function validatePasswordForLogin(passwordElement) {	
 	if(isPasswordValidateElement.value==="true"){
@@ -155,17 +163,20 @@ async function validatePasswordForLogin(passwordElement) {
 	// Java Side Validation.
 	
 	var mainUrl = `${baseUrl}isPasswordExistsOrNot`;
-	const loginData = JSON.stringify({
-		email: email,
-		password: password
-	});
-	const options = {
-		method: 'POST',
-		headers: {
-			'Content-Type': 'application/json',
-		},
-		body: loginData
-	};
+	const encryptedData=await encryptInput(password);
+		console.log(encryptedData);
+		const options = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+				'Accept': 'application/json'
+			},
+			body: JSON.stringify({
+				password: encryptedData.cipherText,
+				iv: encryptedData.ivBase64
+			}) 
+		};
+	
 
 	const response = await fetch(mainUrl, options);
 	if (response.status !== 200) {
@@ -333,6 +344,15 @@ function login(emailId,passwordId,captchaId,event){
 		event.preventDefault();
 		return ;
 	}
+	modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Password Reset Successfully. Redirecting to Login Page...";
+	modalPopup.children[0].childNodes[1].childNodes[3].classList="text-success text-center";
+	$("#exampleModalCenter").modal('show');
+		setTimeout(() => {
+			//Add link redirect to home page
+	          window.location.href = baseUrlForLogin + "login";
+			   }
+			 , 2000); // Redirect after 2 seconds
+    loaderOverlay.classList.add("d-none");
 }
 
 
@@ -436,7 +456,7 @@ function startCountdown(durationInSeconds) {
 
         if (timer <= 0) {
             clearInterval(interval);
-			countdownElement.innerHTML = `<a href="${baseUrl}loadOTPPage" class="text-danger">Request New OTP</a>`;
+			countdownElement.innerHTML = `<a href="#" class="text-danger" onchange="requestNewOtp();>Request New OTP</a>`;
 			otpElement.innerHtML = "";
 			otpElement.readOnly = true;	
 			const nextButton = document.querySelector('button[type="submit"].btn-primary');
@@ -453,12 +473,13 @@ function startCountdown(durationInSeconds) {
 
 
 async function validatePasswordForReset(passwordElement){
-	
+		loaderOverlay.classList.remove("d-none");
 		const regexForPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()<>:]).{6,12}$/
 		let password = passwordElement.value.trim();
 		let validatePassword = document.getElementById("validatePassword");
 		let rePasswordField=document.getElementById("rePasswordId");
-		
+		let isPasswordValidateElement=document.getElementById("isPasswordValidate");
+		let nextButton=document.getElementById("resetPasswordBtn");
 		
 		// Js Side Validation
 		
@@ -471,6 +492,7 @@ async function validatePasswordForReset(passwordElement){
 			loaderOverlay.classList.add("d-none");
 			isPasswordValidateElement.value="false";
 			passwordElement.focus();
+			nextButton.disabled = true;
 			return false;
 		}else if (password.length < 6) {
 			rePasswordField.disabled = true;
@@ -480,6 +502,7 @@ async function validatePasswordForReset(passwordElement){
 			validatePassword.style.border = "1px solid red";
 			loaderOverlay.classList.add("d-none");
 			isPasswordValidateElement.value="false";
+			nextButton.disabled = true;
 			passwordElement.focus();
 			return false;
 		} else if (password.length > 12) {
@@ -491,14 +514,16 @@ async function validatePasswordForReset(passwordElement){
 			passwordElement.focus();
 			loaderOverlay.classList.add("d-none");
 			isPasswordValidateElement.value="false";
+			nextButton.disabled = true;
 			return false;
 		} else {
 			validatePassword.innerText = "";
-			validatePassword.classList.remove("text-danger");
+			validatePassword.classList="text-danger";
 			passwordElement.style.border = "";
 			validatePassword.style="";
 			isPasswordValidateElement.value="false";
 			rePasswordField.disabled = false;
+			nextButton.disabled = false;
 		}
 
 		if (regexForPassword.test(password) == false) {
@@ -509,31 +534,62 @@ async function validatePasswordForReset(passwordElement){
 			passwordElement.style.border = "1px solid red";
 			loaderOverlay.classList.add("d-none");
 			passwordElement.focus();
+			nextButton.disabled = true;
 			isPasswordValidateElement.value="false";
 			return false;
 		} else {
 			validatePassword.innerText = "";
-			validatePassword.classList.remove("text-danger");
+			validatePassword.classList.remove="text-danger";
 			passwordElement.style.border = "";
 			isPasswordValidateElement.value="true";
 			rePasswordField.disabled = false;
-			
+			nextButton.disabled = false;
 		}
 
 		//Server side validation
 		// Java Side Validation.
+		var mainUrl = `${baseUrl}isPasswordExistsOrNotForResetPassword`;
+		const encryptedPassword=await encryptInput(password);
 		
+		const options = {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body:JSON.stringify({
+						password:encryptedPassword.cipherText,
+						iv:encryptedPassword.ivBase64
+					})
+				};
+				
+			const response=await fetch(mainUrl, options);
+			if(response.status===409){
+				validatePassword.innerText = "Password Already Exists..";
+				validatePassword.classList = "text-danger";
+				isPasswordValidateElement="false";
+				loaderOverlay.classList.add("d-none");
+				nextButton.disabled = true;
+				return;
+			}else if(response.status===500){
+				validatePassword.innerText = "Internal Server Error. Please Try Again Later.";
+				validatePassword.classList = "text-danger";
+				loaderOverlay.classList.add("d-none");
+				isPasswordValidateElement="false";
+				nextButton.disabled = true;
+				return;
+			}else if(response.status===200){
+				isPasswordValidateElement="true";
+				validatePassword.innerText = "";
+				validatePassword.classList.remove = "text-danger";
+				loaderOverlay.classList.add("d-none");
+				nextButton.disabled = false;
+				return;
+			}
 		/*var mainUrl = `${baseUrl}saveNewPassword`;
 		const resetPasswordData = JSON.stringify({
 			password: password
 		});
-		const options = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: resetPasswordData
-		};
+		
 
 		const response = await fetch(mainUrl, options);
 		if (response.status !== 200) {
@@ -554,20 +610,31 @@ async function validatePasswordForReset(passwordElement){
 		}*/
 } 
 function validateRePassword(){
+	loaderOverlay.classList.remove("d-none");
 	const password= document.getElementById("passwordId").value.trim();
 	const rePassword=document.getElementById("rePasswordId").value.trim();
-	let validateRePassword = document.getElementById("validateRePassword");
+	let isRePasswordValidateElement=document.getElementById("isRePasswordValidate");
+	let nextButton=document.getElementById("resetPasswordBtn");
 	if(rePassword===""){
+		loaderOverlay.classList.add("d-none");
 		validateRePassword.innerHTML="Please Re Enter Password.";
-		validateRePassword.classList.add("text-danger");
+		validateRePassword.classList.add="text-danger";
+		isRePasswordValidateElement.value="false";
+		nextButton.disabled = true;
 		return false;
 	}else if(password!==rePassword){
+		loaderOverlay.classList.add("d-none");
 		validateRePassword.innerHTML="Both Password are not match. Enter correct Password.";
-		validateRePassword.classList.add("text-danger");
+		validateRePassword.classList.add="text-danger";
+		isRePasswordValidateElement.value="false";
+		nextButton.disabled = true;
 		return false;
 	}else{
+		loaderOverlay.classList.add("d-none");
 		validateRePassword.innerHTML="";
-		validateRePassword.classList.remove("text-danger");
+		validateRePassword.classList.remove="text-danger";
+		isRePasswordValidateElement.value="true";
+		nextButton.disabled = false;
 		return true;
 	}
 }
@@ -579,12 +646,48 @@ window.onload = function() {
 	  }
 };
 
+async function savePassword(event){
+	event.preventDefault();
+	loaderOverlay.classList.remove("d-none");
+	const password=document.getElementById("passwordId").value.trim();
+	const encryptedPassword=await encryptInput(password);
+	var url=`${baseUrl}savePassword`;
+	const options= {
+		method:'POST',
+		headers:{
+			'Content-type':'application/json'
+		},
+		body:JSON.stringify({
+				password:encryptedPassword.cipherText,
+				iv:encryptedPassword.ivBase64
+		})
+	}
+	const response=await fetch(url,options);
+	if(response.status!==200){
+		loaderOverlay.classList.add("d-none");
+	}else{
+		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Password Reset Successfully. Redirecting to Login Page...";
+		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-success text-center";
+		$("#exampleModalCenter").modal('show');
+		setTimeout(() => {
+            window.location.href = baseUrlForLogin + "login";
+		        }
+		 , 2000); // Redirect after 2 seconds
+		loaderOverlay.classList.add("d-none");
+		}
+}
+function requestNewOtp(){
+	window.location.href=baseUrl+"loadOTPPage";
+	window.location.href=baseUrl+"";
+}
 
 window.validateEmailForLogin = validateEmailForLogin;
 window.validateEmailAndGetOTP = validateEmailAndGetOTP;
 window.generateCaptcha =generateCaptcha ;
-
+window.savePassword=savePassword;
 window.validateOTP=validateOTP;
 window.validateRePassword=validateRePassword;
 window.validatePasswordForLogin=validatePasswordForLogin;
 window.validatePasswordForReset=validatePasswordForReset;
+window.login=login;
+window.validateCaptcha=validateCaptcha

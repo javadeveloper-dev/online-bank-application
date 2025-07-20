@@ -7,10 +7,14 @@ import jakarta.mail.MessagingException;
 
 public interface ILoginService {
 
-	Boolean isPasswordExistsOrNot(LoginDTO loginDTO);
+	Boolean isPasswordExistsOrNot(String password);
 	
 	public void sendMailForOTP(MailSenderDTO sendMailDTO) throws MessagingException;
 
 	Boolean isValidOTP(String otp);
+
+	Boolean isPasswordExistsOrNotForReset(String email, String password);
+
+	void updateAdminPassword(String email, String password);
 
 }

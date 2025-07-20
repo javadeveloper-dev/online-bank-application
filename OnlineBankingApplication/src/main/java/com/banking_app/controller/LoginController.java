@@ -13,6 +13,7 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,28 +35,30 @@ import com.banking_app.util.EncryptUtil;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 
-
-
 @Controller
 @RequestMapping("/onlinebankapplication-login/")
 public class LoginController {
-	
+
 	@Autowired(required = true)
 	private ILoginService loginServiceImpl;
-	
+
 	@Autowired(required = true)
 	private IAdminRegistrationService adminRegistrationServiceImpl;
-	
+
 	private String email;
-	
+
+	private String decryptAESData;
+
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value="isEmailPresentForLogin",method=RequestMethod.POST,consumes=org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+	@RequestMapping(value = "isEmailPresentForLogin", method = RequestMethod.POST, consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 //	@PostMapping("isEmailPresentForLogin")
-	public ResponseEntity<String> isEmailPresentForLogin(@RequestBody Map<String, String> requestData) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException{
-		String encryptedEmail=requestData.get("email");
-		String iv=requestData.get("iv");
-		String email=EncryptUtil.decryptAESData(encryptedEmail, iv);
-		Boolean isValidEmail=adminRegistrationServiceImpl.isEmailAlreadyPresentOrNot(email);
+	public ResponseEntity<String> isEmailPresentForLogin(@RequestBody Map<String, String> requestData)
+			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		String encryptedEmail = requestData.get("email");
+		String iv = requestData.get("iv");
+		String email = EncryptUtil.decryptAESData(encryptedEmail, iv);
+		Boolean isValidEmail = adminRegistrationServiceImpl.isEmailAlreadyPresentOrNot(email);
 		ResponseEntity<String> returnStatus;
 		if (isValidEmail) {
 			returnStatus = ResponseEntity.status(HttpStatus.OK).body("Valid User");
@@ -64,10 +67,13 @@ public class LoginController {
 		}
 		return returnStatus;
 	}
-	
+
 	@PostMapping("isPasswordExistsOrNot")
-	public ResponseEntity<String> isPasswordExistsOrNot(@RequestBody LoginDTO loginDTO){
-		Boolean isPasswordPresent=loginServiceImpl.isPasswordExistsOrNot(loginDTO);
+	public ResponseEntity<String> isPasswordExistsOrNot(@RequestBody Map<String,String> encryptedData) throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException, InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
+		String encryptedPassword = encryptedData.get("password");
+		String iv = encryptedData.get("iv");
+		String password = decryptAESData = EncryptUtil.decryptAESData(encryptedPassword, iv);
+		Boolean isPasswordPresent = loginServiceImpl.isPasswordExistsOrNot(password);
 		ResponseEntity<String> returnStatus;
 		if (isPasswordPresent) {
 			returnStatus = ResponseEntity.status(HttpStatus.OK).body("Passsword is Correct");
@@ -76,53 +82,53 @@ public class LoginController {
 		}
 		return returnStatus;
 	}
-	
+
 	@GetMapping("generateCaptcha")
 	@ResponseBody
-	public ResponseEntity<Map<String,String>> generateNewCaptch() throws IOException {
-		String captchaString=CommonUtil.generateCaptcha(5);
-		String captchaImageInString=CommonUtil.generateCaptchaImageString(captchaString);
-		Map<String,String> response=new HashMap<String,String>();
-		response.put("captchaImage","data:image/png;base64,"+captchaImageInString);
-		response.put("captchaValue",captchaString);
+	public ResponseEntity<Map<String, String>> generateNewCaptch() throws IOException {
+		String captchaString = CommonUtil.generateCaptcha(5);
+		String captchaImageInString = CommonUtil.generateCaptchaImageString(captchaString);
+		Map<String, String> response = new HashMap<String, String>();
+		response.put("captchaImage", "data:image/png;base64," + captchaImageInString);
+		response.put("captchaValue", captchaString);
 		return ResponseEntity.ok(response);
 	}
-	
+
 	@GetMapping("loadForgotPassword")
-	public String loadForgotPassword(Model model,HttpServletRequest request){
+	public String loadForgotPassword(Model model, HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString();
-		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
-		String baseUrlForLogin=fullUrl.substring(0,fullUrl.lastIndexOf("-"))+"/";
-		model.addAttribute("baseUrl",baseUrl);
-		model.addAttribute("baseUrlForLogin",baseUrlForLogin);
+		String baseUrl = fullUrl.substring(0, fullUrl.lastIndexOf("/") + 1);
+		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("-")) + "/";
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
 		return "loadForgotPasswordForOTP";
 	}
-	
+
 //	@PostMapping("loadOTPPage")
-	@RequestMapping(method= {RequestMethod.GET,RequestMethod.POST},value="loadOTPPage")
-	public String loadOTPPage(Model model,HttpServletRequest request) throws MessagingException{
+	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "loadOTPPage")
+	public String loadOTPPage(Model model, HttpServletRequest request) throws MessagingException {
 		String fullUrl = request.getRequestURL().toString();
-		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
-		String baseUrlForLogin=fullUrl.substring(0,fullUrl.lastIndexOf("-"))+"/";
-		model.addAttribute("baseUrl",baseUrl);
-		model.addAttribute("baseUrlForLogin",baseUrlForLogin);
+		String baseUrl = fullUrl.substring(0, fullUrl.lastIndexOf("/") + 1);
+		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("-")) + "/";
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
 		return "loadOTP";
 //		return "redirect:loadOTP";
 
 	}
-	
-	@PostMapping(value="validateOTP",consumes=org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> validateOTP(@RequestBody Map <String, String> otp){
-		String otpValue=otp.get("otp");
+
+	@PostMapping(value = "validateOTP", consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> validateOTP(@RequestBody Map<String, String> otp) {
+		String otpValue = otp.get("otp");
 		Boolean validOTP = loginServiceImpl.isValidOTP(otpValue);
-		return validOTP==true?ResponseEntity.ok("OTP Validated Successfully"):ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid OTP");
+		return validOTP == true ? ResponseEntity.ok("OTP Validated Successfully")
+				: ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid OTP");
 	}
-	
-	
-	@PostMapping(value="sendOTP",consumes=org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<String> sendOTP(@RequestBody Map <String, String> email) throws MessagingException{
-		String emailData=email.get("email");
-		MailSenderDTO mailSenderDTO=new MailSenderDTO();
+
+	@PostMapping(value = "sendOTP", consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> sendOTP(@RequestBody Map<String, String> email) throws MessagingException {
+		String emailData = email.get("email");
+		MailSenderDTO mailSenderDTO = new MailSenderDTO();
 		mailSenderDTO.setFrom("tayadepankaj1999@gmail.com");
 		mailSenderDTO.setTo(emailData);
 		mailSenderDTO.setMessage("Hello");
@@ -130,21 +136,59 @@ public class LoginController {
 		mailSenderDTO.setSubject("Hello");
 		try {
 			loginServiceImpl.sendMailForOTP(mailSenderDTO);
-		}catch (Exception e) {
+			this.email = emailData;
+		} catch (Exception e) {
 			e.printStackTrace();
-			 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in sending OTP");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error in sending OTP");
 		}
-		this.email= emailData;
-		return ResponseEntity.ok("OTP sent successfully to "+emailData);
+		return ResponseEntity.ok("OTP sent successfully to " + emailData);
 	}
-	
+
 	@GetMapping("forgotPassword")
-	public String forgotPassword(Model model,HttpServletRequest request){
+	public String forgotPassword(Model model, HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString();
-		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
-		String baseUrlForLogin=fullUrl.substring(0,fullUrl.lastIndexOf("-"))+"/";
-		model.addAttribute("baseUrl",baseUrl);
-		model.addAttribute("baseUrlForLogin",baseUrlForLogin);
+		String baseUrl = fullUrl.substring(0, fullUrl.lastIndexOf("/") + 1);
+		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("-")) + "/";
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
 		return "loadForgotPassword";
+	}
+
+	@PostMapping(value = "isPasswordExistsOrNotForResetPassword", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> isPasswordExistsOrNotForReset(@RequestBody Map<String, String> requestData)
+			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, javax.crypto.BadPaddingException {
+		String encryptedPassword = requestData.get("password");
+		String iv = requestData.get("iv");
+		String password = decryptAESData = EncryptUtil.decryptAESData(encryptedPassword, iv);
+		Boolean isPasswordExists = loginServiceImpl.isPasswordExistsOrNotForReset(this.email, password);
+		ResponseEntity<String> responseEntity;
+		if (isPasswordExists) {
+			responseEntity = new ResponseEntity<String>("Password Already Exists", HttpStatus.CONFLICT);
+		} else {
+			responseEntity = new ResponseEntity<String>("Password is not exists", HttpStatus.OK);
+		}
+		return responseEntity;
+
+	}
+
+	@PostMapping(value = "savePassword", consumes = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<String> savePassword(@RequestBody Map<String, String> requestData)
+			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
+			InvalidAlgorithmParameterException, IllegalBlockSizeException, javax.crypto.BadPaddingException {
+		String encryptedPassword = requestData.get("password");
+		String iv = requestData.get("iv");
+		String password = decryptAESData = EncryptUtil.decryptAESData(encryptedPassword, iv);
+		ResponseEntity<String> responseEntity;
+		try {
+			loginServiceImpl.updateAdminPassword(this.email, password);
+			responseEntity = new ResponseEntity<String>("Password Saved Successfully", HttpStatus.CONFLICT);
+			this.email = "";
+		} catch (Exception e) {
+
+			responseEntity = new ResponseEntity<String>("Password is not exists", HttpStatus.OK);
+		}
+		return responseEntity;
+
 	}
 }

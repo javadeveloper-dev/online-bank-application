@@ -20,11 +20,18 @@ public class AdminRegistrationServiceImpl implements IAdminRegistrationService {
 	@Autowired(required=true)
 	private IAdminRegisterDAO entityManagerFactory;
 	
+	public String email;
 	
 	@Autowired
 	private ModelMapper mapper;
 	
 	public Boolean isEmailAlreadyPresentOrNot(String email) {
+		Boolean isEmailPresent=entityManagerFactory.existsByEmail(email);
+		if(isEmailPresent) {
+			this.email=email;
+		}else {
+			this.email="";
+		}
 		return entityManagerFactory.existsByEmail(email);
 	}
 
