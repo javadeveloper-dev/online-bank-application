@@ -1,6 +1,5 @@
 package com.banking_app.service;
 
-import com.banking_app.dto.LoginDTO;
 import com.banking_app.dto.MailSenderDTO;
 
 import jakarta.mail.MessagingException;

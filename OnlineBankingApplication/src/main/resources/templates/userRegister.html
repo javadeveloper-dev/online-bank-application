@@ -40,7 +40,7 @@
         </ul>
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link text-white" href="/login.html">Login</a>
+            <a class="nav-link text-white" th:href="@{${baseUrl + 'login'}}">Login</a>
           </li>
         </ul>
       </div>
@@ -55,10 +55,8 @@
           <h2 class="text-center text-white ubuntu-regular">User Registration</h2>
         </div>
         <div class="card-body">
-          <form class="needs-validation" novalidate>
             <p class="ubuntu-regular text-white"> User Details</p>
             <hr>
-            <form class="needs-validation" novalidate>
               <div class="form-group row">
                 <label for="firstName" class="col-sm-2 col-form-label ubuntu-regular text-white">First Name</label>
                 <div class="col-sm-10">
@@ -120,8 +118,10 @@
                     Select Role
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <ul>
                     <li class="dropdown-item" onclick="selectRole('Admin');">Admin</li>
                     <li class="dropdown-item" onclick="selectRole('User');">User</li>
+                    </ul>
                   </div>
                   <input type="hidden" id="selectedRole" name="selectedRole"/>
                 </div>
@@ -179,10 +179,9 @@
       </div>
     </div>
   </div>
-</div>
-</div>
-</form>
+  </form>
 </body>
+<input type="hidden" id="baseUrl" name="baseUrl" th:value="${baseUrl}"/>
 <script th:src="@{'/js/common.js'}"></script>
 <script th:src="@{'https://code.jquery.com/jquery-3.2.1.slim.min.js'}" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
 <script th:src="@{'https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js'}" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

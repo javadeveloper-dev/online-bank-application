@@ -5,7 +5,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import com.banking_app.dto.LoginDTO;
 import com.banking_app.entity.Admin;
 @Repository
 public interface IAdminRegisterDAO extends JpaRepository<Admin, Integer> {

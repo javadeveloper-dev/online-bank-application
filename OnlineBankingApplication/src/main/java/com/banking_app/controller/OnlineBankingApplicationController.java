@@ -57,7 +57,11 @@ public class OnlineBankingApplicationController {
 	}
 
 	@GetMapping("userRegister")
-	public String userRegister(Model model) {
+	public String userRegister(Model model,HttpServletRequest request) {
+		model.addAttribute("title", "Online Banking Application");
+		String fullUrl = request.getRequestURL().toString();
+		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
+		model.addAttribute("baseUrl",baseUrl);
 		model.addAttribute("title", "Online Banking Application");
 		return "userRegister";
 	}
@@ -71,7 +75,6 @@ public class OnlineBankingApplicationController {
 	}
 
 	@PostMapping(value = "saveAdminRegistration",consumes=org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-//	@RequestMapping(value = "saveAdminRegistration", consumes = org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE, method = RequestMethod.POST)
 	public ResponseEntity<String> saveAdminRegistrationDetail(@ModelAttribute AdminDTO adminRegistrationData,ModelMap modelMap,HttpServletRequest request) throws IOException {
 		try {
 		logger.info("Executing saveAdminRegistrationDetail() Handler Method........");

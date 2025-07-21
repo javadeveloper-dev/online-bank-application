@@ -69,22 +69,20 @@ xmlns:th="http//www.thymeleaf.org">
                          </div>
                          <p class="text-white">Enter the OTP immediately.OTP is expired after 30 seconds.</p>
                       	<p id="otpTimer" class="text-white">
-                        </div>
+                       
                          <div class="d-flex justify-content-between mt-n2" style="position: relative; top: -10px;">
-            					<button type="button" class="btn btn-primary "><a th:href="@{${baseUrl}+'loadForgotPassword'}" class="text-white" style="cursor:pointer; text-decoration: none;">
+            					<button type="button" class="btn btn-primary "><a th:href="@{${baseUrl}+'loadForgotPassword'}" class="text-white" style="cursor:pointer; text-decoration: none;" >
    								 Back
 								</a></button>
            					    <button type="submit" class="btn btn-primary">
                           			  Next
                        		    </button>
                          </div>
+                         </form>
        					 </div>
-                      </form>
                 </div>
             </div>
-        </div>    
-    </div>
-</div>
+            </div>
 <input type="hidden" id="baseUrl" name="baseUrl" th:value="${baseUrl}"/>
 <input type="hidden" id="isEmailValidate" value=""/>
 </body>

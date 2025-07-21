@@ -45,7 +45,6 @@ public class AdminDTO {
 	@PasswordValidator
 	private String password;
 	
-//	@NotBlank(message="Please Enter Confirm Password.")
 	@ConfirmPasswordValidator
 	private String confirmPassword;
 

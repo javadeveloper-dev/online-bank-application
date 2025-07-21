@@ -15,7 +15,7 @@ public class OnlineBankingApplicationApplication {
 		return new ModelMapper();
 	}
 	public static void main(String[] args) {
-		var run = SpringApplication.run(OnlineBankingApplicationApplication.class, args);
+		SpringApplication.run(OnlineBankingApplicationApplication.class, args);
 	}
 
 }

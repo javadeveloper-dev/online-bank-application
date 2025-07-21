@@ -57,8 +57,4 @@ public class AdminRegistrationServiceImpl implements IAdminRegistrationService {
 		return entityManagerFactory.existsByMobileNo(mobileNo);
 	}
 
-	
-
-	
-	
 }

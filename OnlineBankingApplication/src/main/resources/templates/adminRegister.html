@@ -82,7 +82,7 @@
                   <label for="address" class="col-sm-2 col-form-label ubuntu-regular text-white">Address </label>
                   <div class="col-sm-10">
                     <input type="text" class="form-control" id="address" name="address"
-                      placeholder="Enter Address" onchange="validateAddress(this);" minlength="10" maxlengthlengthlength="100"/> 
+                      placeholder="Enter Address" onchange="validateAddress(this);" min="10" maxlength="100"/> 
                   </div>
                 </div>
                 <div class="form-group row mt-2">
@@ -94,7 +94,7 @@
                 <div class="form-group row mt-2">
                   <label for="password" class="col-sm-2 col-form-label ubuntu-regular text-white">Password</label>
                   <div class="col-sm-10">
-                    <input type="password" class="form-control" id="password" name="password" minlength="6" maxlengthlengthlength="8" placeholder="Enter Password" onchange="validatePassword(this);"/>
+                    <input type="password" class="form-control" id="password" name="password" min="6" maxlength="8" placeholder="Enter Password" onchange="validatePassword(this);"/>
                   </div>
                 </div>
                 <div class="form-group row mt-2">
@@ -112,12 +112,14 @@
                 <div class="form-group row mt-2 dropdown">
                   <label for="dropdownRole" class="col-sm-2 col-form-label ubuntu-regular text-white">Role</label>
                   <div class="dropdown col-sm-10 ">
-                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" th>
+                    <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
                       Select Role
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                      <li class="dropdown-item" onclick="selectRole('Admin');">Admin</li>
+              		 <ul>
+              		  <li class="dropdown-item" onclick="selectRole('Admin');">Admin</li>
                       <li class="dropdown-item" onclick="selectRole('User');">User</li>
+                      </ul>
                     </div>
                     <input type="hidden" id="selectedRole" name="selectedRole"/>
                   </div>
@@ -136,24 +138,24 @@
                 <div class="form-group row mt-2">
                   <label for="inputMobileNo" class="col-sm-2 col-form-label ubuntu-regular text-white">Mobile No</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="mobileNo" placeholder="Mobile Number" maxlengthlength="10" onchange="validateMobileNo(this);"name="mobileNo"/>
+                    <input type="text" class="form-control" id="mobileNo" placeholder="Mobile Number" max="10" onchange="validateMobileNo(this);"name="mobileNo"/>
                   </div>
                 </div>
                 <div class="form-group mt-3">
                   <label class="col-form-label ubuntu-regular text-white">Gender</label>
                   <div class="form-check form-check-inline" style="margin-left:60px;">
                       <input class="form-check-input" type="radio" name="gender" id="femaleRadio" value="female" />
-                      <label class="form-check-label ubuntu-regular" for="femaleRadio"/>Female</label>
+                      <label class="form-check-label ubuntu-regular" for="femaleRadio">Female</label>
                   </div>
                   <div class="form-check form-check-inline">
                       <input class="form-check-input" type="radio" name="gender" id="maleRadio" value="male" />
-                      <label class="form-check-label ubuntu-regular" for="maleRadio"/>Male</label>
+                      <label class="form-check-label ubuntu-regular" for="maleRadio">Male</label>
                   </div>
                 </div>
                 <div class="form-group row mt-2">
                   <label for="nationality" class="col-sm-2 col-form-label ubuntu-regular text-white">Nationality</label>
                   <div class="col-sm-10">
-                    <input type="text" class="form-control" id="nationality" name="nationality" minlength="2" maxlengthlengthlength="50" onchange="validateNationality(this);" placeholder="Enter the Nationality" />
+                    <input type="text" class="form-control" id="nationality" name="nationality" min="2" max="50" onchange="validateNationality(this);" placeholder="Enter the Nationality" />
                     <div class="valid-feedback">
                       Please Enter the Nationality
                     </div>
@@ -172,8 +174,6 @@
         </div>
       </div>
     </div>
-  </div>
-  </div>
   </form>
   <!-- Popup -->
   <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">

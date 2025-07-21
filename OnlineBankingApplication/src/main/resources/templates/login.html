@@ -1,4 +1,4 @@
-z<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en"
 xmlns:th="http//www.thymeleaf.org">
 <head>
@@ -58,7 +58,7 @@ xmlns:th="http//www.thymeleaf.org">
                     <h2 class="text-center text-white"> Login</h2>
                 </div>
                 <div class="card-body">
-                    <form method="POST"  onsubmit="login('emailId','passwordId','captchaId',event);">
+                    <form method="POST"  onsubmit="login(event);">
 						<div id="loaderOverlay" class="loader-overlay d-none">
     						<div class="loader-spinner"></div>
 						</div>
@@ -94,8 +94,6 @@ xmlns:th="http//www.thymeleaf.org">
                             <a th:href="@{${baseUrl}+'loadForgotPassword'}" class="forgot-password-link text-white" style="cursor:pointer;" id="forgotPasswordId">
    								 Forgot Password?
 							</a>
-
-                          
                             <a href="#" class="forgot-password-link text-white register-new-account" data-bs-toggle="modal" data-bs-target="#exampleModal">Register a New Account?</a>
                             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                                 <div class="modal-dialog" role="document">
@@ -140,7 +138,6 @@ xmlns:th="http//www.thymeleaf.org">
             </div>
         </div>    
     </div>
-</div>
 <input type="hidden" id="baseUrl" name="baseUrl" th:value="${baseUrl}"/>
 <input type="hidden" id="isEmailValidate" value=""/>
 <input type="hidden" id="isPasswordValidate" value=""/>

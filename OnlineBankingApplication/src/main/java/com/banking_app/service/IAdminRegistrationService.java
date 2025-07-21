@@ -3,7 +3,6 @@ package com.banking_app.service;
 import java.io.IOException;
 
 import com.banking_app.dto.AdminDTO;
-import com.banking_app.dto.LoginDTO;
 
 public interface IAdminRegistrationService {
 

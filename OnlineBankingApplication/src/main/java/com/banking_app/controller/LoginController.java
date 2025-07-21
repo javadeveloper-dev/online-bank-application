@@ -25,7 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.banking_app.dto.LoginDTO;
 import com.banking_app.dto.MailSenderDTO;
 import com.banking_app.service.IAdminRegistrationService;
 import com.banking_app.service.ILoginService;
@@ -50,8 +49,7 @@ public class LoginController {
 	private String decryptAESData;
 
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "isEmailPresentForLogin", method = RequestMethod.POST, consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
-//	@PostMapping("isEmailPresentForLogin")
+	@PostMapping(value = "isEmailPresentForLogin" , consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> isEmailPresentForLogin(@RequestBody Map<String, String> requestData)
 			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
 			InvalidAlgorithmParameterException, IllegalBlockSizeException, BadPaddingException {
@@ -113,7 +111,6 @@ public class LoginController {
 		model.addAttribute("baseUrl", baseUrl);
 		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
 		return "loadOTP";
-//		return "redirect:loadOTP";
 
 	}
 
@@ -189,6 +186,6 @@ public class LoginController {
 			responseEntity = new ResponseEntity<String>("Password is not exists", HttpStatus.OK);
 		}
 		return responseEntity;
-
 	}
+	
 }

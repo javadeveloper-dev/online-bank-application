@@ -33,9 +33,6 @@ public class LoginServiceImpl implements ILoginService {
 	@Autowired
 	private AdminRegistrationServiceImpl adminRegistrationServiceImpl;
 	
-	@Autowired
-	private ModelMapper modelmapper;
-	
 	@Override
 	public Boolean isPasswordExistsOrNot(String password) {
 		String email=adminRegistrationServiceImpl.email;
