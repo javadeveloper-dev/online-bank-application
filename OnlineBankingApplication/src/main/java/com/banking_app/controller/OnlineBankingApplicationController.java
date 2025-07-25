@@ -38,8 +38,10 @@ public class OnlineBankingApplicationController {
 	public String welComePage(Model model,HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString();
 		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
+		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("/")) + "-login/";
 		model.addAttribute("adminDTO", new AdminDTO());
 		model.addAttribute("baseUrl",baseUrl);
+		model.addAttribute("baseUrlForLogin",baseUrlForLogin);
 		model.addAttribute("messege", "Hello World!..");
 		model.addAttribute("title", "Online Banking Application");
 		log.info("welComePage() handler method......");

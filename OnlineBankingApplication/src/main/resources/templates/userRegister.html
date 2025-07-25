@@ -47,12 +47,12 @@
     </div>
   </nav>
   <!-- method="POST" action="/registerUser" -->
-<form method="POST" action="/registerUser" id="#userRegisterId" onsubmit="submitUserRegisteredData()" enctype="multipart/form-data">
+  <form method="POST"  onsubmit="saveRegistrationForm(this,event);"  enctype="multipart/form-data">
   <div class="container">
     <div class="row col-md-8 offset-md-2">
       <div class="card">
         <div class="card-header bg-primary">
-          <h2 class="text-center text-white ubuntu-regular">User Registration</h2>
+          <h2 class="text-center text-white ubuntu-regular" id="registrationType">User Registration</h2>
         </div>
         <div class="card-body">
             <p class="ubuntu-regular text-white"> User Details</p>

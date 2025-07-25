@@ -192,6 +192,7 @@ function hideLoader(){
 
 
 async function saveRegistrationForm(formBody,event){
+  const registrationType=document.getElementById("registrationType").innerHTML.trim();
   showLoader();
   event.preventDefault(); 
   var form=formBody;
@@ -244,10 +245,15 @@ async function saveRegistrationForm(formBody,event){
     event.preventDefault();
     return;
   }
- 
+  var url;
+  if(registrationType==="Admin Registration"){
+	 url=`${baseUrl}saveAdminRegistration?adminRegistrationData`;
+  }else{
+	 url=`${baseUrl}saveAdminRegistration?us`;
+  }	
   var saveRegistereData=getFormDataFromFormBody(formBody);
   var baseUrl=document.getElementById("baseUrl").value;
-  const url=`${baseUrl}saveAdminRegistration?adminRegistrationData`;
+ // const url=`${baseUrl}saveAdminRegistration?adminRegistrationData`;
   const options={
 	  method:'POST',
 	  body:saveRegistereData,

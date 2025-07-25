@@ -1,15 +1,17 @@
 var modalPopup=document.getElementById("exampleModalCenter");
+var maleRadioBtn=document.querySelector("#maleRadio");
+var femaleRadioBtn=document.querySelector("#femaleRadio");
+
 function selectRole(role) {
     document.getElementById('selectedRole').value = role;
     document.getElementById('dropdownMenuButton').innerHTML = role;
-  }
-  function resetRole(dropdownRole){
+}
+
+function resetRole(dropdownRole){
     document.getElementById('selectedRole').removeAttribute("value");
     document.getElementById('dropdownMenuButton').innerHTML='Select Role';
-  }
+}
 
-  var maleRadioBtn=document.querySelector("#maleRadio");
-  var femaleRadioBtn=document.querySelector("#femaleRadio");
 
 let updateAccount=document.querySelector("#btnForUpdateAccount");
 if(updateAccount!==null){
@@ -22,11 +24,11 @@ if(updateAccount.innerHTML==="Update Details"){
 var inputFields=document.querySelectorAll("input");
 if(updateAccount!==null){
 	updateAccount.addEventListener("click",()=>{
-  updateAccount.innerHTML="Save Changes";
-  maleRadioBtn.removeAttribute("disabled");
-  femaleRadioBtn.removeAttribute("disabled");
-  console.log(updateAccount);
-  console.log(inputFields);
+  	updateAccount.innerHTML="Save Changes";
+ 	maleRadioBtn.removeAttribute("disabled");
+  	femaleRadioBtn.removeAttribute("disabled");
+    console.log(updateAccount);
+  	console.log(inputFields);
   
   for(var input of inputFields){
     if(input.id!=="custId"){

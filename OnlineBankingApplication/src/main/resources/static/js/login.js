@@ -13,13 +13,14 @@ if(document.getElementById("baseUrlForLogin")!==null){
     baseUrlForLogin = document.getElementById("baseUrlForLogin").value;
 }
 async function validateEmailForLogin(emailElement,event) {
-	
+	//event.preventDefault();
     // Show loader and blur background
     loaderOverlay.classList.remove("d-none");
 	const regexForEmail = /^[a-zA-Z0-9.]{1,64}@[a-zA-Z]{1,253}\.[a-zA-Z]{2,}$/;
 	let email = emailElement.value.trim();
 	let validateEmail = document.getElementById("validateEmail");
-    
+	var passwordElement = document.getElementById("passwordId");
+	var captchaElement = document.getElementById("captchaId");
 	// Js Side Validation
 	if (regexForEmail.test(email) == false) {
 		emailElement.value = "";
@@ -54,7 +55,7 @@ async function validateEmailForLogin(emailElement,event) {
 		}) 
 	};
 	
-	var mainUrl = `${baseUrl}isEmailPresentForLogin`;
+	var mainUrl = `${baseUrlForLogin}isEmailPresentForLogin`;
 	//var mainUrl = `${baseUrl}isEmailPresentForLogin?email=${encodeURIComponent(email)}`;
 	const response = await fetch(mainUrl, options);
 	if (response.status !== 200) {
@@ -101,8 +102,8 @@ async function validatePasswordForLogin(passwordElement) {
 		loaderOverlay.classList.add("d-none");
 		isPasswordValidateElement.value="false";
 		return false;
-		
 	}
+	
 	if (password==='') {
 		passwordElement.value = "";
 		validatePassword.innerText = "Please Enter Password...";
@@ -157,7 +158,7 @@ async function validatePasswordForLogin(passwordElement) {
 	//Server side validation
 	// Java Side Validation.
 	
-	var mainUrl = `${baseUrl}isPasswordExistsOrNot`;
+	var mainUrl = `${baseUrlForLogin}isPasswordExistsOrNot`;
 	const encryptedData=await encryptInput(password);
 		console.log(encryptedData);
 		const options = {
@@ -197,7 +198,7 @@ async function validatePasswordForLogin(passwordElement) {
 
 async function generateCaptcha(){
 	var baseUrl = document.getElementById("baseUrl").value;
-	var mainUrl =`${baseUrl}generateCaptcha`;
+	var mainUrl =`${baseUrlForLogin}generateCaptcha`;
     const options=fetch(mainUrl,{
     method:"GET",
     headers:{
@@ -253,22 +254,35 @@ function validateCaptcha(captchaId){
 
 
 function login(event){
+	const loginType= document.getElementById("loginType").innerText;
     loaderOverlay.classList.add("d-none");
 	if(isEmailValidateElement.value==="false" || isEmailValidateElement.value===""){
 		event.preventDefault();
+		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Please Enter Email to Login...";
+		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
+		$("#exampleModalCenter").modal('show');
 		return ;
 	}
 	if(isPasswordValidateElement.value==="false" || isPasswordValidateElement.value===""){
 		event.preventDefault();
-		return ;
+		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Please Enter Password to Login...";
+		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
+		$("#exampleModalCenter").modal('show');		
+			return ;
 	}
 	if(isCaptchaValidateElement.value==="false" || isCaptchaValidateElement.value===""){
 		event.preventDefault();
+		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Enter Valid Captcha to Login...";
+		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
+		$("#exampleModalCenter").modal('show');
 		return ;
 	}
 	modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Loggin Successful Redirecting to Home Page...";
 	modalPopup.children[0].childNodes[1].childNodes[3].classList="text-success text-center";
 	$("#exampleModalCenter").modal('show');
+	
+	//add logic on the basis of loginType to redirect for login validation .
+	 
 		setTimeout(() => {
 			//Add link redirect to home page
 			  loaderOverlay.classList.add("d-none");
@@ -527,6 +541,10 @@ function validateRePassword(){
 	}
 }
 
+function closeModalPopup() {
+	$("#exampleModalCenter").modal('hide');	
+}
+
 window.onload = function() {
 	const currentPage = window.location.pathname; 
 	  if (currentPage.includes("loadOTPPage")) { 
@@ -575,3 +593,4 @@ window.validatePasswordForLogin=validatePasswordForLogin;
 window.validatePasswordForReset=validatePasswordForReset;
 window.login=login;
 window.validateCaptcha=validateCaptcha
+window.closeModalPopup=closeModalPopup;

@@ -188,4 +188,21 @@ public class LoginController {
 		return responseEntity;
 	}
 	
+	@GetMapping({"adminLogin","userLogin"})
+	public String login(Model model, HttpServletRequest request) {
+		String fullUrl = request.getRequestURL().toString();
+		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("/") + 1);
+		String baseUrl = fullUrl.substring(0, fullUrl.lastIndexOf("-")) + "/";
+		model.addAttribute("baseUrl", baseUrl);
+		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
+		if(fullUrl.contains("adminLogin")) {
+			model.addAttribute("loginType", "Admin Login");
+		}else {
+			model.addAttribute("loginType", "User Login");
+		}
+		return "login";
+	}
+	
+	
+	
 }
