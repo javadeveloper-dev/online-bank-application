@@ -1,5 +1,6 @@
 const loaderWrapper=document.getElementById("loader-wrapper");
-
+const baseUrl=document.getElementById("baseUrl").value;
+const baseUrlForAdmin=document.getElementById("baseUrlForAdmin").value;
  function validateName(name){
 	var nameValue=name.value.trim();
     const regexForName=/^[A-Z]+[a-z]{1,58}$/;
@@ -247,13 +248,14 @@ async function saveRegistrationForm(formBody,event){
   }
   var url;
   if(registrationType==="Admin Registration"){
-	 url=`${baseUrl}saveAdminRegistration?adminRegistrationData`;
+	 url=`${baseUrlForAdmin}?saveAdminRegistratoinData`;
   }else{
-	 url=`${baseUrl}saveAdminRegistration?us`;
+	 url=`${baseUrlForUser}?saveUserRegistratoinData`;
   }	
   var saveRegistereData=getFormDataFromFormBody(formBody);
   var baseUrl=document.getElementById("baseUrl").value;
  // const url=`${baseUrl}saveAdminRegistration?adminRegistrationData`;
+
   const options={
 	  method:'POST',
 	  body:saveRegistereData,

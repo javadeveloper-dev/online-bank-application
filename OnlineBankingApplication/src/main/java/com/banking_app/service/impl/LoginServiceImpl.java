@@ -1,4 +1,4 @@
-package com.banking_app.service;
+package com.banking_app.service.impl;
 
 import java.io.File;
 
@@ -14,6 +14,7 @@ import com.banking_app.dto.AdminDTO;
 import com.banking_app.dto.LoginDTO;
 import com.banking_app.dto.MailSenderDTO;
 import com.banking_app.entity.Admin;
+import com.banking_app.service.ILoginService;
 import com.banking_app.util.CommonUtil;
 
 import jakarta.mail.MessagingException;

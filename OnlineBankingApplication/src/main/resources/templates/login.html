@@ -97,7 +97,7 @@ xmlns:th="http//www.thymeleaf.org">
                             </div>
                         </div>
                         <div class="mt-3">
-                            <a th:href="@{${baseUrl}+'loadForgotPassword'}" class="forgot-password-link text-white" style="cursor:pointer;" id="forgotPasswordId">
+                            <a th:href="@{${baseUrlForLogin}+'loadForgotPassword'}" class="forgot-password-link text-white" style="cursor:pointer;" id="forgotPasswordId">
    								 Forgot Password?
 							</a>
                             <a href="#" class="forgot-password-link text-white register-new-account" data-bs-toggle="modal" data-bs-target="#exampleModal">Register a New Account?</a>
@@ -111,8 +111,8 @@ xmlns:th="http//www.thymeleaf.org">
                                     </button>
                                     </div>
                                     <div class="modal-body">
-                                        <a th:href="@{userRegister}" class="forgot-password-link text-black">User Registraion</a>
-                                        <a th:href="@{adminRegister}" class="forgot-password-link admin-register text-black">Admin Registration</a>
+                                        <a th:href="@{${baseUrl}+'userRegister'}" class="forgot-password-link text-black">User Registraion</a>
+                                        <a th:href="@{${baseUrl}+'adminRegister'}" class="forgot-password-link admin-register text-black">Admin Registration</a>
                                     </div>
                                 </div>
                                 </div>

@@ -1,4 +1,4 @@
-package com.banking_app.service;
+package com.banking_app.service.impl;
 
 import java.io.IOException;
 import java.sql.Date;
@@ -9,9 +9,8 @@ import org.springframework.stereotype.Service;
 
 import com.banking_app.dao.IAdminRegisterDAO;
 import com.banking_app.dto.AdminDTO;
-import com.banking_app.dto.LoginDTO;
 import com.banking_app.entity.Admin;
-import com.banking_app.exception.EmailAlreadyExistsException;
+import com.banking_app.service.IAdminRegistrationService;
 import com.banking_app.util.CommonUtil;
 
 @Service

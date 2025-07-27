@@ -42,7 +42,7 @@
           </ul>
           <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-              <a class="nav-link text-white" th:href="@{${baseUrl + 'login'}}">Login</a>
+              <a class="nav-link text-white" th:href="@{${baseUrl + 'welcome'}}">Back to Home Page</a>
             </li>
           </ul>
         </div>
@@ -194,7 +194,7 @@
     </div>
   </div>
  <input type="hidden" id="baseUrl" name="baseUrl" th:value="${baseUrl}"/>
-
+<input type="hidden" id="baseUrlForAdmin" name="baseUrlForAdmin" th:value="${baseUrlForAdmin}"/>
   </body>
  
 <script th:src="@{'/js/common.js'}"></script>

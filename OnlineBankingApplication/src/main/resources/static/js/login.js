@@ -6,7 +6,7 @@ let loaderOverlay = document.getElementById("loaderOverlay");
 let isEmailValidateElement=document.getElementById("isEmailValidate");
 let isPasswordValidateElement=document.getElementById("isPasswordValidate");
 let isCaptchaValidateElement=document.getElementById("isCaptchValidate");
-var baseUrl = document.getElementById("baseUrl").value;
+var baseUrl = document.getElementById("baseUrl").value+"login/";
 
 var baseUrlForLogin;
 if(document.getElementById("baseUrlForLogin")!==null){
@@ -77,7 +77,6 @@ async function validateEmailForLogin(emailElement,event) {
 		validateEmail.style="";
 		loaderOverlay.classList.add("d-none");
 		isEmailValidateElement.value="true";
-		
 		return true;
 	}
 }
@@ -197,7 +196,7 @@ async function validatePasswordForLogin(passwordElement) {
 }
 
 async function generateCaptcha(){
-	var baseUrl = document.getElementById("baseUrl").value;
+	//var baseUrl = document.getElementById("baseUrl").value;
 	var mainUrl =`${baseUrlForLogin}generateCaptcha`;
     const options=fetch(mainUrl,{
     method:"GET",
@@ -262,7 +261,7 @@ function login(event){
 		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
 		$("#exampleModalCenter").modal('show');
 		return ;
-	}
+	} 
 	if(isPasswordValidateElement.value==="false" || isPasswordValidateElement.value===""){
 		event.preventDefault();
 		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Please Enter Password to Login...";
@@ -282,11 +281,16 @@ function login(event){
 	$("#exampleModalCenter").modal('show');
 	
 	//add logic on the basis of loginType to redirect for login validation .
-	 
+	 var loginUrl=baseUrlForLogin;
+	if (loginType === "Admin Login") {
+		loginUrl +=   "adminLogin";
+	} else {
+		loginUrl +=  "userLogin";
+	}
 		setTimeout(() => {
 			//Add link redirect to home page
 			  loaderOverlay.classList.add("d-none");
-	          window.location.href = baseUrlForLogin + "login";
+	          window.location.href = loginUrl;
 			   }
 			 , 5000); // Redirect after 2 seconds
 }
@@ -301,7 +305,7 @@ function resetLoginForm(){
 
 if(document.getElementById("forgotPasswordId")!==null){
 document.getElementById("forgotPasswordId").addEventListener("click",async ()=>{
-	var urlForgotPasswordLoad=baseUrl+"loadForgotPassword";
+	var urlForgotPasswordLoad=baseUrlForLogin+"loadForgotPassword";
 	const options ={
 		method:'GET',
 		header:{
@@ -333,7 +337,7 @@ async function validateOTP(event){
 		},
 		body:JSON.stringify({otp:otp})
 	};
-	var urlForOTPValidate=baseUrl+"validateOTP";
+	var urlForOTPValidate=baseUrlForLogin+"validateOTP";
 	const response=await fetch(urlForOTPValidate , options);
 	if(response.status===200){
 		window.location.href=baseUrl+"forgotPassword";
@@ -360,7 +364,7 @@ async function validateEmailAndGetOTP(event){
 		},
 		body:JSON.stringify({email:emailElement.value})
 	};
-	var urlForSendOTP=baseUrl+"sendOTP";
+	var urlForSendOTP=baseUrlForLogin+"sendOTP";
 	const response=await fetch(urlForSendOTP , options);
 	if(response.status===200){
 		window.location.href =baseUrl+"loadOTPPage";
@@ -472,7 +476,7 @@ async function validatePasswordForReset(passwordElement){
 
 		//Server side validation
 		// Java Side Validation.
-		var mainUrl = `${baseUrl}isPasswordExistsOrNotForResetPassword`;
+		var mainUrl = `${baseUrlForLogin}isPasswordExistsOrNotForResetPassword`;
 		const encryptedPassword=await encryptInput(password);
 		
 		const options = {
@@ -557,7 +561,7 @@ async function savePassword(event){
 	loaderOverlay.classList.remove("d-none");
 	const password=document.getElementById("passwordId").value.trim();
 	const encryptedPassword=await encryptInput(password);
-	var url=`${baseUrl}savePassword`;
+	var url=`${baseUrlForLogin}savePassword`;
 	const options= {
 		method:'POST',
 		headers:{

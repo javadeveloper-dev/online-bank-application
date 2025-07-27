@@ -30,12 +30,13 @@ import com.banking_app.service.IAdminRegistrationService;
 import com.banking_app.service.ILoginService;
 import com.banking_app.util.CommonUtil;
 import com.banking_app.util.EncryptUtil;
+import com.banking_app.util.LoginUtil;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Controller
-@RequestMapping("/onlinebankapplication-login/")
+@RequestMapping("/onlinebankapplication/login")
 public class LoginController {
 
 	@Autowired(required = true)
@@ -95,10 +96,8 @@ public class LoginController {
 	@GetMapping("loadForgotPassword")
 	public String loadForgotPassword(Model model, HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString();
-		String baseUrl = fullUrl.substring(0, fullUrl.lastIndexOf("/") + 1);
-		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("-")) + "/";
-		model.addAttribute("baseUrl", baseUrl);
-		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
+		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
+		model.addAttribute("baseUrlForLogin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		return "loadForgotPasswordForOTP";
 	}
 
@@ -106,10 +105,8 @@ public class LoginController {
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "loadOTPPage")
 	public String loadOTPPage(Model model, HttpServletRequest request) throws MessagingException {
 		String fullUrl = request.getRequestURL().toString();
-		String baseUrl = fullUrl.substring(0, fullUrl.lastIndexOf("/") + 1);
-		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("-")) + "/";
-		model.addAttribute("baseUrl", baseUrl);
-		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
+		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
+		model.addAttribute("baseUrlForLogin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		return "loadOTP";
 
 	}
@@ -144,10 +141,8 @@ public class LoginController {
 	@GetMapping("forgotPassword")
 	public String forgotPassword(Model model, HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString();
-		String baseUrl = fullUrl.substring(0, fullUrl.lastIndexOf("/") + 1);
-		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("-")) + "/";
-		model.addAttribute("baseUrl", baseUrl);
-		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
+		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
+		model.addAttribute("baseUrlForLogin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		return "loadForgotPassword";
 	}
 
@@ -191,10 +186,8 @@ public class LoginController {
 	@GetMapping({"adminLogin","userLogin"})
 	public String login(Model model, HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString();
-		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("/") + 1);
-		String baseUrl = fullUrl.substring(0, fullUrl.lastIndexOf("-")) + "/";
-		model.addAttribute("baseUrl", baseUrl);
-		model.addAttribute("baseUrlForLogin", baseUrlForLogin);
+		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
+		model.addAttribute("baseUrlForLogin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		if(fullUrl.contains("adminLogin")) {
 			model.addAttribute("loginType", "Admin Login");
 		}else {
@@ -202,7 +195,4 @@ public class LoginController {
 		}
 		return "login";
 	}
-	
-	
-	
 }

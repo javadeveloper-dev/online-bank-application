@@ -48,47 +48,12 @@ public class OnlineBankingApplicationController {
 		return "index";
 	}
 
-	@GetMapping("adminRegister")
-	public String adminRegister(Model model,HttpServletRequest request) throws UnknownHostException {
-		model.addAttribute("title", "Online Banking Application");
-		String fullUrl = request.getRequestURL().toString();
-		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
-		model.addAttribute("adminDTO", new AdminDTO());
-		model.addAttribute("baseUrl",baseUrl);
-		 return "adminRegister";
-	}
-
-	@GetMapping("userRegister")
-	public String userRegister(Model model,HttpServletRequest request) {
-		model.addAttribute("title", "Online Banking Application");
-		String fullUrl = request.getRequestURL().toString();
-		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
-		model.addAttribute("baseUrl",baseUrl);
-		model.addAttribute("title", "Online Banking Application");
-		return "userRegister";
-	}
-
 	@GetMapping("login")
 	public String adminLogin(Model model,HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString().replace("onlinebankapplication", "onlinebankapplication-login");
 		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
 		model.addAttribute("baseUrl",baseUrl);
 		return "login";
-	}
-
-	@PostMapping(value = "saveAdminRegistration",consumes=org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<String> saveAdminRegistrationDetail(@ModelAttribute AdminDTO adminRegistrationData,ModelMap modelMap,HttpServletRequest request) throws IOException {
-		try {
-		logger.info("Executing saveAdminRegistrationDetail() Handler Method........");
-		UUID uuId = UUID.randomUUID();
-		AdminDTO saveAdminRegistrationDetail = adminRegistrationServiceImpl.saveAdminRegistrationDetail(adminRegistrationData);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-//		validate form data
-//		modelMap.addAttribute("adminRegisterDTO",saveAdminRegistrationDetail);
-		modelMap.addAttribute("adminName", adminRegistrationData.getFirstName());
-		return ResponseEntity.ok(adminRegistrationData.getFirstName());
 	}
 
 	@GetMapping("isEmailAlreadyExists")
