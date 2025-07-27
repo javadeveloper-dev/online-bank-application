@@ -1,0 +1,14 @@
+package com.banking_app.configuration;
+
+import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+@Configuration
+public class OnlineBankingApplicationConfiguration implements WebMvcConfigurer {
+
+	public void addViewController(ViewControllerRegistry registry) {
+		registry.addViewController("/onlinebankapplication/welcome").setViewName("index");
+	}
+	
+}
