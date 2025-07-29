@@ -5,32 +5,28 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
-import com.banking_app.dao.ILoginDAO;
+import com.banking_app.dao.IAdminLoginDAO;
 import com.banking_app.dto.MailSenderDTO;
-import com.banking_app.service.ILoginService;
+import com.banking_app.service.IAdminLoginService;
 import com.banking_app.util.CommonUtil;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-
 @Service
-public class LoginServiceImpl implements ILoginService {
-
+public class AdminLoginServiceImpl implements IAdminLoginService {
+	
 	@Autowired
-	private ILoginDAO loginDAOImpl;
-
+	private IAdminLoginDAO adminLoginDAOImpl;
 	@Autowired
 	private JavaMailSender javaMailSender;
 
 	private String otp;
 	
-	@Autowired
-	private AdminRegistrationServiceImpl adminRegistrationServiceImpl;
-	
 	@Override
 	public Boolean isPasswordExistsOrNot(String password) {
-		String email=adminRegistrationServiceImpl.email;
-		return loginDAOImpl.existsByEmailAndPassword(email, password);
+//		String email=adminRegistrationServiceImpl.email;
+//		return adminLoginDAOImpl.existsByEmailAndPassword(email, password);
+		return false; // Placeholder, implement logic as needed	
 	}
 
 	@Override
@@ -73,12 +69,14 @@ public class LoginServiceImpl implements ILoginService {
 	}
 
 	public Boolean isPasswordExistsOrNotForReset(String email,String password) {
-		return loginDAOImpl.existsByEmailAndPassword(email, password);
+//		return adminLoginDAOImpl.existsByEmailAndPassword(email, password);
+		return false; // Placeholder, implement logic as needed
 	}
 
 	public void updateAdminPassword(String email, String password) {
-		loginDAOImpl.updateAdminPassword(email, password);
+		//adminLoginDAOImpl.updateAdminPassword(email, password);
+		
 	}
 
-
+	
 }

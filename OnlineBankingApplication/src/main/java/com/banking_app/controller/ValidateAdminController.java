@@ -3,40 +3,23 @@ package com.banking_app.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.banking_app.dto.AdminDTO;
 import com.banking_app.service.IAdminRegistrationService;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@RestController
 @Slf4j
-@RequestMapping("/onlinebankapplication/")
-public class OnlineBankingApplicationController {
-
+@RequestMapping("/onlinebankapplication/validateAdmin/")
+public class ValidateAdminController {
+	
 	@Autowired(required = true)
 	private IAdminRegistrationService adminRegistrationServiceImpl;
-
-	@GetMapping("welcome")
-	public String welComePage(Model model,HttpServletRequest request) {
-		String fullUrl = request.getRequestURL().toString();
-		String baseUrl=fullUrl.substring(0,fullUrl.lastIndexOf("/")+1);
-		String baseUrlForLogin = fullUrl.substring(0, fullUrl.lastIndexOf("/")) + "-login/";
-		model.addAttribute("adminDTO", new AdminDTO());
-		model.addAttribute("baseUrl",baseUrl);
-		model.addAttribute("baseUrlForLogin",baseUrlForLogin);
-		model.addAttribute("messege", "Hello World!..");
-		model.addAttribute("title", "Online Banking Application");
-		log.info("welComePage() handler method......");
-		return "index";
-	}
-
+	
 	@GetMapping("isEmailAlreadyExists")
 	public ResponseEntity<String> emailAlreadyExists(@RequestParam String email) {
 		Boolean emailPresent=adminRegistrationServiceImpl.isEmailAlreadyPresentOrNot(email);
@@ -49,9 +32,9 @@ public class OnlineBankingApplicationController {
 		return returnStatus;
 	}
 	
-	
 	@GetMapping("isAccountNoAlreadyExists")
 	public ResponseEntity<String> isAccountNoAlreadyExists(@RequestParam String accountNo) {
+		log.info("isAccountNoAlreadyExists() handler method called with accountNo: {}", accountNo);
 		Boolean emailPresent=adminRegistrationServiceImpl.isAccountNoAlreadyExists(accountNo);
 		ResponseEntity<String> returnStatus;
 		if (emailPresent) {
@@ -64,6 +47,7 @@ public class OnlineBankingApplicationController {
 	
 	@GetMapping("isMobileNoAlreadyExists")
 	public ResponseEntity<String> isMobileNoAlreadyExists(@RequestParam String mobileNo) {
+		log.info("isMobileNoAlreadyExists() handler method called with mobileNo: {}", mobileNo);
 		Boolean moblieNoPresent=adminRegistrationServiceImpl.isMobileNoAlreadyExists(mobileNo);
 		ResponseEntity<String> returnStatus;
 		if (moblieNoPresent) {
@@ -73,5 +57,4 @@ public class OnlineBankingApplicationController {
 		}
 		return returnStatus;
 	}
-	
 }

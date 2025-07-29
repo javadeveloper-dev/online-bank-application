@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "admin_register",schema="admin")
+@Table(name = "user_register",schema="user")
 @DynamicInsert
 @DynamicUpdate
 @AllArgsConstructor

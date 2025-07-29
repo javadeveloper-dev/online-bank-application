@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.banking_app.dto.AdminDTO;
 import com.banking_app.dto.UserDTO;
 import com.banking_app.service.IUserRegistrationService;
 import com.banking_app.util.LoginUtil;
@@ -29,20 +28,18 @@ public class UserController {
 	@Autowired(required = true)
 	private IUserRegistrationService userRegistrationServiceImpl;
 	
-	
-	
 	@GetMapping("loadUserRegister")
 	public String userRegister(Model model,HttpServletRequest request) {
 		log.info("userRegister() handler method called...");
 		String fullUrl = request.getRequestURL().toString();
 		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
-		model.addAttribute("baseUrlForAdmin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
+		model.addAttribute("baseUrlForUser", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		model.addAttribute("title", "Online Banking Application");
 		return "userRegister";
 	}
 	
-	@PostMapping(value = "saveAdminRegistration",consumes=org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
-	public ResponseEntity<String> saveAdminRegistrationDetail(@ModelAttribute UserDTO userRegistrationData,ModelMap modelMap,HttpServletRequest request) throws IOException {
+	@PostMapping(value = "saveUserRegistrationData",consumes=org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+	public ResponseEntity<String> saveUserRegistrationDetail(@ModelAttribute UserDTO userRegistrationData,ModelMap modelMap,HttpServletRequest request) throws IOException {
 		try {
 		log.info("Executing saveAdminRegistrationDetail() Handler Method........");
 		UUID uuId = UUID.randomUUID();

@@ -5,16 +5,18 @@ import java.sql.Date;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.banking_app.dao.IUserRegisterDAO;
-import com.banking_app.dto.AdminDTO;
 import com.banking_app.dto.UserDTO;
-import com.banking_app.entity.Admin;
 import com.banking_app.entity.User;
 import com.banking_app.service.IUserRegistrationService;
 import com.banking_app.util.CommonUtil;
 
+import lombok.extern.slf4j.Slf4j;
 
+@Service
+@Slf4j
 public class UserRegistrationServiceImpl implements IUserRegistrationService {
 
 	@Autowired(required = true)
@@ -31,7 +33,26 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService {
 		user.setDateOfBirth(dateOfBirth);
 		User savedUserEntity = entityManagerFactory.save(user);
 		UserDTO savedUserDTO=mapper.map(savedUserEntity, UserDTO.class);
+		log.info("User registration successful for user: {}", savedUserDTO.getFirstName());
 		return savedUserDTO; // Return the saved user data
+	}
+
+	@Override
+	public Boolean isEmailAlreadyPresentOrNot(String email) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean isAccountNoAlreadyExists(String accountNo) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean isMobileNoAlreadyExists(String mobileNo) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

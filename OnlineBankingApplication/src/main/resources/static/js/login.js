@@ -112,7 +112,7 @@ async function validatePasswordForLogin(passwordElement) {
 		isPasswordValidateElement.value="false";
 		passwordElement.focus();
 		return false;
-	}else if (password.length < 6) {
+	}else if (password.length < 8) {
 		passwordElement.value = "";
 		validatePassword.innerText = "Minimum Password Length is 6";
 		validatePassword.classList = "text-danger";
