@@ -1,5 +1,7 @@
 package com.banking_app.service.impl;
 
+import java.sql.SQLException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -24,15 +26,6 @@ public class LoginServiceImpl implements ILoginService {
 
 	private String otp;
 	
-	@Autowired
-	private AdminRegistrationServiceImpl adminRegistrationServiceImpl;
-	
-	@Override
-	public Boolean isPasswordExistsOrNot(String password) {
-		String email=adminRegistrationServiceImpl.email;
-		return loginDAOImpl.existsByEmailAndPassword(email, password);
-	}
-
 	@Override
 	public void sendMailForOTP(MailSenderDTO sendMailDTO) throws MessagingException {
 		MimeMessage mimeMessage = javaMailSender.createMimeMessage();
@@ -60,10 +53,6 @@ public class LoginServiceImpl implements ILoginService {
 
 				"<p><strong style='font-size: 18px;'>Thank you,<br/>XYZ Bank</strong></p>" + "</body>" + "</html>";
 		helper.setText(htmlSubject, true);
-		// Set true for HTML content
-//         FileSystemResource fileSystemResource=new FileSystemResource(new File(mailSenderDTO.getFilePath()));
-//         helper.addAttachment(fileSystemResource.getFilename(),fileSystemResource);
-		// Send the email
 		javaMailSender.send(mimeMessage);
 	}
 
@@ -75,10 +64,5 @@ public class LoginServiceImpl implements ILoginService {
 	public Boolean isPasswordExistsOrNotForReset(String email,String password) {
 		return loginDAOImpl.existsByEmailAndPassword(email, password);
 	}
-
-	public void updateAdminPassword(String email, String password) {
-		loginDAOImpl.updateAdminPassword(email, password);
-	}
-
 
 }

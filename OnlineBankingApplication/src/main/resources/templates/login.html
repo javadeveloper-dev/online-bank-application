@@ -40,8 +40,8 @@ xmlns:th="http//www.thymeleaf.org">
                 Registration
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" th:href="@{/onlinebankapplication/adminRegister}">Register As Admin</a></li>
-                  <li><a class="dropdown-item" th:href="@{/onlinebankapplication/userRegister}">Register As User</a></li>
+                   <li><a class="dropdown-item" th:href="@{${baseUrl+'admin/loadAdminRegister'}}">Register As Admin</a></li>
+                  <li><a class="dropdown-item" th:href="@{${baseUrl+'user/loadUserRegister'}}">Register As User</a></li>
                 </ul>
               </li>  
               <li class="nav-item dropdown">
@@ -111,8 +111,8 @@ xmlns:th="http//www.thymeleaf.org">
                                     </button>
                                     </div>
                                     <div class="modal-body">
-                                        <a th:href="@{${baseUrl}+'userRegister'}" class="forgot-password-link text-black">User Registraion</a>
-                                        <a th:href="@{${baseUrl}+'adminRegister'}" class="forgot-password-link admin-register text-black">Admin Registration</a>
+                                        <a th:href="@{${baseUrl+'admin/loadAdminRegister'}}" class="forgot-password-link text-black">User Registraion</a>
+                                        <a th:href="@{${baseUrl}+'user/loadUserRegister'}" class="forgot-password-link admin-register text-black">Admin Registration</a>
                                     </div>
                                 </div>
                                 </div>

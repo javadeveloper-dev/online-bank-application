@@ -1,16 +1,8 @@
 package com.banking_app.service;
 
-import com.banking_app.dto.MailSenderDTO;
-
-import jakarta.mail.MessagingException;
-
 public interface IAdminLoginService {
 	
-	Boolean isPasswordExistsOrNot(String password);
-
-	public void sendMailForOTP(MailSenderDTO sendMailDTO) throws MessagingException;
-
-	Boolean isValidOTP(String otp);
+	Boolean isPasswordExistsOrNot(String email,String password);
 
 	Boolean isPasswordExistsOrNotForReset(String email, String password);
 

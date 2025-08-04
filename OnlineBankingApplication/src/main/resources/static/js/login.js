@@ -12,6 +12,10 @@ var baseUrlForLogin;
 if(document.getElementById("baseUrlForLogin")!==null){
     baseUrlForLogin = document.getElementById("baseUrlForLogin").value;
 }
+var loginType;
+if(document.getElementById("loginType")!==null){
+	loginType= document.getElementById("loginType").innerText;	
+}
 async function validateEmailForLogin(emailElement,event) {
 	//event.preventDefault();
     // Show loader and blur background
@@ -51,7 +55,8 @@ async function validateEmailForLogin(emailElement,event) {
 		},
 		body: JSON.stringify({
 			email: encryptedData.cipherText,
-			iv: encryptedData.ivBase64
+			iv: encryptedData.ivBase64,
+			loginType:loginType,
 		}) 
 	};
 	
@@ -168,7 +173,8 @@ async function validatePasswordForLogin(passwordElement) {
 			},
 			body: JSON.stringify({
 				password: encryptedData.cipherText,
-				iv: encryptedData.ivBase64
+				iv: encryptedData.ivBase64,
+				loginType:loginType
 			}) 
 		};
 	
@@ -557,6 +563,7 @@ window.onload = function() {
 };
 
 async function savePassword(event){
+	try{
 	event.preventDefault();
 	loaderOverlay.classList.remove("d-none");
 	const password=document.getElementById("passwordId").value.trim();
@@ -575,16 +582,28 @@ async function savePassword(event){
 	const response=await fetch(url,options);
 	if(response.status!==200){
 		loaderOverlay.classList.add("d-none");
+		modalPopup.children[0].childNodes[1].childNodes[3].innerText = response.text();
+		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
+		$("#exampleModalCenter").modal('show');
 	}else{
-		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Password Reset Successfully. Redirecting to Login Page...";
+		modalPopup.children[0].childNodes[1].childNodes[3].innerText = response.text()+" Redirecting to Login Page...";
 		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-success text-center";
 		$("#exampleModalCenter").modal('show');
 		setTimeout(() => {
-            window.location.href = baseUrlForLogin + "login";
+			if(loginType==="User Login"){
+            window.location.href = baseUrlForLogin + "userLogin";				
+			}else{
+			window.location.href = baseUrlForLogin + "adminLogin";
+			}
 		        }
 		 , 2000); // Redirect after 2 seconds
 		loaderOverlay.classList.add("d-none");
 		}
+	}catch(error){
+		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "System Error";
+		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
+		$("#exampleModalCenter").modal('show');
+	}	
 }
 
 window.validateEmailForLogin = validateEmailForLogin;
@@ -598,3 +617,4 @@ window.validatePasswordForReset=validatePasswordForReset;
 window.login=login;
 window.validateCaptcha=validateCaptcha
 window.closeModalPopup=closeModalPopup;
+window.startCountdown=startCountdown;

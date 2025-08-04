@@ -25,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.banking_app.constants.LoginConstants;
 import com.banking_app.dto.MailSenderDTO;
+import com.banking_app.service.IAdminLoginService;
 import com.banking_app.service.IAdminRegistrationService;
 import com.banking_app.service.ILoginService;
+import com.banking_app.service.IUserLoginService;
+import com.banking_app.service.IUserRegistrationService;
 import com.banking_app.util.CommonUtil;
 import com.banking_app.util.EncryptUtil;
 import com.banking_app.util.LoginUtil;
@@ -44,10 +48,21 @@ public class LoginController {
 
 	@Autowired(required = true)
 	private IAdminRegistrationService adminRegistrationServiceImpl;
+	
+	@Autowired(required = true)
+	private IUserRegistrationService userRegistrationServiceImpl;
+	
+	@Autowired
+	private IUserLoginService userLoginServiceImpl;
+	
+	@Autowired
+	private IAdminLoginService adminLoginServiceImpl;
 
 	private String email;
 
 	private String decryptAESData;
+	
+	private String loginType;
 
 	@CrossOrigin(origins = "*")
 	@PostMapping(value = "isEmailPresentForLogin" , consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
@@ -57,10 +72,17 @@ public class LoginController {
 		String encryptedEmail = requestData.get("email");
 		String iv = requestData.get("iv");
 		String email = EncryptUtil.decryptAESData(encryptedEmail, iv);
-		Boolean isValidEmail = adminRegistrationServiceImpl.isEmailAlreadyPresentOrNot(email);
+		String loginType=requestData.get("loginType");
+		Boolean isValidEmail = false;
+		if(loginType.equals(LoginConstants.ADMIN_LOGIN)) {
+			isValidEmail=adminRegistrationServiceImpl.isEmailAlreadyPresentOrNot(email);			
+		}else {
+			isValidEmail=userRegistrationServiceImpl.isEmailAlreadyPresentOrNot(email);
+		}
 		ResponseEntity<String> returnStatus;
 		if (isValidEmail) {
 			returnStatus = ResponseEntity.status(HttpStatus.OK).body("Valid User");
+			this.email=email;
 		} else {
 			returnStatus = ResponseEntity.status(HttpStatus.NOT_FOUND).body("Invalid User...");
 		}
@@ -72,7 +94,13 @@ public class LoginController {
 		String encryptedPassword = encryptedData.get("password");
 		String iv = encryptedData.get("iv");
 		String password = decryptAESData = EncryptUtil.decryptAESData(encryptedPassword, iv);
-		Boolean isPasswordPresent = loginServiceImpl.isPasswordExistsOrNot(password);
+		String loginType=encryptedData.get("loginType");
+		Boolean isPasswordPresent =false;
+		if(loginType.equals(LoginConstants.ADMIN_LOGIN)) {
+			isPasswordPresent=adminLoginServiceImpl.isPasswordExistsOrNot(email,password);			
+		}else {
+			isPasswordPresent=userLoginServiceImpl.isPasswordExistsOrNot(email,password);
+		}
 		ResponseEntity<String> returnStatus;
 		if (isPasswordPresent) {
 			returnStatus = ResponseEntity.status(HttpStatus.OK).body("Passsword is Correct");
@@ -96,12 +124,12 @@ public class LoginController {
 	@GetMapping("loadForgotPassword")
 	public String loadForgotPassword(Model model, HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString();
+		model.addAttribute("loginType", this.loginType);
 		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
 		model.addAttribute("baseUrlForLogin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		return "loadForgotPasswordForOTP";
 	}
 
-//	@PostMapping("loadOTPPage")
 	@RequestMapping(method = { RequestMethod.GET, RequestMethod.POST }, value = "loadOTPPage")
 	public String loadOTPPage(Model model, HttpServletRequest request) throws MessagingException {
 		String fullUrl = request.getRequestURL().toString();
@@ -125,9 +153,6 @@ public class LoginController {
 		MailSenderDTO mailSenderDTO = new MailSenderDTO();
 		mailSenderDTO.setFrom("tayadepankaj1999@gmail.com");
 		mailSenderDTO.setTo(emailData);
-		mailSenderDTO.setMessage("Hello");
-		mailSenderDTO.setBody("HELLO");
-		mailSenderDTO.setSubject("Hello");
 		try {
 			loginServiceImpl.sendMailForOTP(mailSenderDTO);
 			this.email = emailData;
@@ -140,8 +165,9 @@ public class LoginController {
 
 	@GetMapping("forgotPassword")
 	public String forgotPassword(Model model, HttpServletRequest request) {
-		String fullUrl = request.getRequestURL().toString();
+		String fullUrl = request.getRequestURL().toString(); 
 		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
+		model.addAttribute("loginType", this.loginType);
 		model.addAttribute("baseUrlForLogin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		return "loadForgotPassword";
 	}
@@ -161,24 +187,25 @@ public class LoginController {
 			responseEntity = new ResponseEntity<String>("Password is not exists", HttpStatus.OK);
 		}
 		return responseEntity;
-
 	}
 
 	@PostMapping(value = "savePassword", consumes = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> savePassword(@RequestBody Map<String, String> requestData)
-			throws InvalidKeyException, NoSuchAlgorithmException, NoSuchPaddingException,
-			InvalidAlgorithmParameterException, IllegalBlockSizeException, javax.crypto.BadPaddingException {
+			{
+		ResponseEntity<String> responseEntity;
+		try {
 		String encryptedPassword = requestData.get("password");
 		String iv = requestData.get("iv");
 		String password = decryptAESData = EncryptUtil.decryptAESData(encryptedPassword, iv);
-		ResponseEntity<String> responseEntity;
-		try {
-			loginServiceImpl.updateAdminPassword(this.email, password);
-			responseEntity = new ResponseEntity<String>("Password Saved Successfully", HttpStatus.CONFLICT);
+			if(loginType.equals(LoginConstants.ADMIN_LOGIN)) {
+				adminLoginServiceImpl.updateAdminPassword(this.email, password);
+			}else {
+				userLoginServiceImpl.updateUserPassword(this.email, password);
+			}
+			responseEntity = new ResponseEntity<String>("Password Reset Successfully...", HttpStatus.OK);
 			this.email = "";
-		} catch (Exception e) {
-
-			responseEntity = new ResponseEntity<String>("Password is not exists", HttpStatus.OK);
+		} catch(Exception exception) {
+			responseEntity = new ResponseEntity<String>(exception.getMessage(), HttpStatus.CONFLICT);
 		}
 		return responseEntity;
 	}
@@ -189,10 +216,11 @@ public class LoginController {
 		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
 		model.addAttribute("baseUrlForLogin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		if(fullUrl.contains("adminLogin")) {
-			model.addAttribute("loginType", "Admin Login");
+			this.loginType=LoginConstants.ADMIN_LOGIN; 
 		}else {
-			model.addAttribute("loginType", "User Login");
+			this.loginType=LoginConstants.USER_LOGIN;
 		}
+		model.addAttribute("loginType", this.loginType);
 		return "login";
 	}
 }

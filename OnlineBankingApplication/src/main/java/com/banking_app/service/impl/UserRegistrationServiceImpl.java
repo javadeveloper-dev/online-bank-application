@@ -22,6 +22,8 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService {
 	@Autowired(required = true)
 	private ModelMapper mapper;
 	
+	public String email;
+	
 	@Autowired(required = true)
 	private IUserRegisterDAO entityManagerFactory;
 	
@@ -39,20 +41,23 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService {
 
 	@Override
 	public Boolean isEmailAlreadyPresentOrNot(String email) {
-		// TODO Auto-generated method stub
-		return null;
+		Boolean isEmailPresent=entityManagerFactory.existsByEmail(email);
+		if(isEmailPresent) {
+			this.email=email;
+		}else {
+			this.email="";
+		}
+		return entityManagerFactory.existsByEmail(email);
 	}
 
 	@Override
 	public Boolean isAccountNoAlreadyExists(String accountNo) {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManagerFactory.existsByAccountNo(accountNo);
 	}
 
 	@Override
 	public Boolean isMobileNoAlreadyExists(String mobileNo) {
-		// TODO Auto-generated method stub
-		return null;
+		return entityManagerFactory.existsByMobileNo(mobileNo);
 	}
 
 }
