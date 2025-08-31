@@ -6,6 +6,12 @@ public class LoginUtil {
 			return fullUrl.substring(0, fullUrl.lastIndexOf("admin"));
 		}else if(fullUrl.contains("/user/")) {
 			return fullUrl.substring(0, fullUrl.lastIndexOf("user"));
+		}else if(fullUrl.contains("/welcome")) {
+			return fullUrl.substring(0, fullUrl.lastIndexOf("welcome"));
+		}else if(fullUrl.contains("/logout")) {
+			return fullUrl.substring(0, fullUrl.lastIndexOf("logout"));
+		}else if(fullUrl.contains("/error")) {
+			return fullUrl.substring(0, fullUrl.lastIndexOf("error"))+"onlinebankapplication/";
 		}
 		return fullUrl.substring(0, fullUrl.lastIndexOf("login"));	
 	}

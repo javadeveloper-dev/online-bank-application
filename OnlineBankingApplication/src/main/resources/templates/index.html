@@ -42,8 +42,8 @@
                 Registration
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" th:href="@{${baseUrl}+'admin/loadAdminRegister'}">Register As Admin</a></li>
-                  <li><a class="dropdown-item" th:href="@{${baseUrl}+'user/loadUserRegister'}">Register As User</a></li>
+                  <li><a class="dropdown-item" th:href="@{${baseUrl+'admin/loadAdminRegister'}}">Register As Admin</a></li>
+                  <li><a class="dropdown-item" th:href="@{${baseUrl+'user/loadUserRegister'}}">Register As User</a></li>
                 </ul>
               </li>  
                <li class="nav-item dropdown">
@@ -51,8 +51,8 @@
                 Login
                 </button>
                 <ul class="dropdown-menu">
-                  <li><a class="dropdown-item" th:href="@{${baseUrl}+'login/adminLogin'}">Login As Admin</a></li>
-                  <li><a class="dropdown-item" th:href="@{${baseUrl}+'login/userLogin'}">Login As User</a></li>
+                  <li><a class="dropdown-item" th:href="@{${baseUrlForLogin}+adminLogin}">Login As Admin</a></li>
+                  <li><a class="dropdown-item" th:href="@{${baseUrlForLogin}+userLogin}">Login As User</a></li>
                 </ul>
               </li>
           </ul>

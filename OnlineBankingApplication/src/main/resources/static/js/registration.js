@@ -197,6 +197,10 @@ function hideLoader() {
 async function saveRegistrationForm(formBody, event) {
 	try {
 		var baseUrl;
+		const csrfToken = document.querySelector('meta[name="_csrf"]').getAttribute("content");
+		const csrfHeader = document.querySelector('meta[name="_csrf_header"]').getAttribute("content");
+
+
 		if (document.getElementById("baseUrl") !== null) {
 			baseUrl = document.getElementById("baseUrl").value
 		}
@@ -267,6 +271,7 @@ async function saveRegistrationForm(formBody, event) {
 		} else {
 			url = `${baseUrlForUser}saveUserRegistrationData`;
 		}
+		var data = new FormData(formBody);
 		var saveRegistereData = getFormDataFromFormBody(formBody);
 		// const url=`${baseUrl}saveAdminRegistration?adminRegistrationData`;
 		// i want to print saveREgistereData in console with each key and value
@@ -277,24 +282,13 @@ async function saveRegistrationForm(formBody, event) {
 				
 		const options = {
 			method: 'POST',
+			headers: {
+				[csrfHeader]: csrfToken
+				},
 			body: saveRegistereData,
 		};
 		const response = await fetch(url, options);
-		/*
-		if(response.status===200){
-		  hideLoader();
-		  modalPopup.children[0].childNodes[1].childNodes[3].innerText="Admin Register Successfully....";
-		  $("#exampleModalCenter").modal('show');    
-		  event.preventDefault();
-		  makeFormReadonly(formBody);
-		  return;
-	   }else{
-		  hideLoader();
-		  modalPopup.children[0].childNodes[1].childNodes[3].innerText="Please Contact System Administrator...";
-		  $("#exampleModalCenter").modal('show');    
-		  event.preventDefault();
-		  return;
-	   } */
+	
 		if (response.status !== 200) {
 			hideLoader();
 			modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Please Contact System Administrator...";
@@ -302,6 +296,7 @@ async function saveRegistrationForm(formBody, event) {
 			event.preventDefault();
 			return;
 		} else {
+			
 			window.location.href = `${baseUrl}welcome`;
 			hideLoader();
 			return;

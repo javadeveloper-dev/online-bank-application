@@ -18,6 +18,7 @@ import com.banking_app.service.IUserRegistrationService;
 import com.banking_app.util.LoginUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -51,5 +52,18 @@ public class UserController {
 //		modelMap.addAttribute("adminRegisterDTO",saveAdminRegistrationDetail);
 		modelMap.addAttribute("adminName", userRegistrationData.getFirstName());
 		return ResponseEntity.ok(userRegistrationData.getFirstName());
+	}
+	
+	@GetMapping("dashboard")
+	public String userDashboard(Model model,HttpServletRequest request,HttpSession session) {
+		log.info("userDashboard() handler method called...");
+		model.addAttribute("title", "Online Banking Application");
+		String fullUrl = request.getRequestURL().toString();
+		log.info("Curruent Session"+request.getSession().getAttribute("userName"));
+		session.setAttribute("userName", request.getSession().getAttribute("userName"));
+		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
+		model.addAttribute("baseUrlForUser", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
+		model.addAttribute("userName", session);
+		return "loadDashboard";
 	}
 }

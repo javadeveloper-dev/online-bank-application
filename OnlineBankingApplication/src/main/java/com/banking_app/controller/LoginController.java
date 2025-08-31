@@ -38,6 +38,7 @@ import com.banking_app.util.LoginUtil;
 
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/onlinebankapplication/login")
@@ -63,6 +64,7 @@ public class LoginController {
 	private String decryptAESData;
 	
 	private String loginType;
+	
 
 	@CrossOrigin(origins = "*")
 	@PostMapping(value = "isEmailPresentForLogin" , consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
@@ -213,6 +215,7 @@ public class LoginController {
 	@GetMapping({"adminLogin","userLogin"})
 	public String login(Model model, HttpServletRequest request) {
 		String fullUrl = request.getRequestURL().toString();
+		HttpSession session = request.getSession();
 		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
 		model.addAttribute("baseUrlForLogin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
 		if(fullUrl.contains("adminLogin")) {

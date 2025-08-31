@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.banking_app.dao.IUserRegisterDAO;
@@ -24,6 +25,10 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService {
 	
 	public String email;
 	
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
 	@Autowired(required = true)
 	private IUserRegisterDAO entityManagerFactory;
 	
@@ -33,6 +38,7 @@ public class UserRegistrationServiceImpl implements IUserRegistrationService {
 		User user=mapper.map(userDTO, User.class);
 		user.setProfilePhoto(byteArrayFrombyteArray);
 		user.setDateOfBirth(dateOfBirth);
+		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		User savedUserEntity = entityManagerFactory.save(user);
 		UserDTO savedUserDTO=mapper.map(savedUserEntity, UserDTO.class);
 		log.info("User registration successful for user: {}", savedUserDTO.getFirstName());

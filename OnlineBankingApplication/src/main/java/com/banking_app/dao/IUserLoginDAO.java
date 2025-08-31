@@ -1,5 +1,7 @@
 package com.banking_app.dao;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +14,7 @@ public interface IUserLoginDAO extends JpaRepository<User, Long> {
 	@Query("Select case when count(userAlias)>0 then true else false END from User as userAlias where userAlias.email =:email and userAlias.password =:password")
 	Boolean existsByEmailAndPassword(String email, String password);
 
-	User findByEmail(String email);
+	Optional<User> findByEmail(String email);
 	
 	@Modifying
 	@Query("UPDATE User SET password =:password WHERE email =:email")

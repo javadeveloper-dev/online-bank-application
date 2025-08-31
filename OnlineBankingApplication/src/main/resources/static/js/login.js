@@ -6,7 +6,7 @@ let loaderOverlay = document.getElementById("loaderOverlay");
 let isEmailValidateElement=document.getElementById("isEmailValidate");
 let isPasswordValidateElement=document.getElementById("isPasswordValidate");
 let isCaptchaValidateElement=document.getElementById("isCaptchValidate");
-var baseUrl = document.getElementById("baseUrl").value+"login/";
+var baseUrl = document.getElementById("baseUrl").value;
 
 var baseUrlForLogin;
 if(document.getElementById("baseUrlForLogin")!==null){
@@ -258,47 +258,70 @@ function validateCaptcha(captchaId){
 }
 
 
-function login(event){
+async function login(event){
+	event.preventDefault();
 	const loginType= document.getElementById("loginType").innerText;
-    loaderOverlay.classList.add("d-none");
+    loaderOverlay.classList.remove("d-none");
 	if(isEmailValidateElement.value==="false" || isEmailValidateElement.value===""){
 		event.preventDefault();
 		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Please Enter Email to Login...";
 		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
 		$("#exampleModalCenter").modal('show');
+		loaderOverlay.classList.add("d-none");
 		return ;
 	} 
 	if(isPasswordValidateElement.value==="false" || isPasswordValidateElement.value===""){
 		event.preventDefault();
 		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Please Enter Password to Login...";
 		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
-		$("#exampleModalCenter").modal('show');		
-			return ;
+		$("#exampleModalCenter").modal('show');
+		loaderOverlay.classList.add("d-none");		
+		return ;
 	}
 	if(isCaptchaValidateElement.value==="false" || isCaptchaValidateElement.value===""){
 		event.preventDefault();
 		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Enter Valid Captcha to Login...";
 		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
 		$("#exampleModalCenter").modal('show');
+		loaderOverlay.classList.add("d-none");
 		return ;
 	}
-	modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Loggin Successful Redirecting to Home Page...";
-	modalPopup.children[0].childNodes[1].childNodes[3].classList="text-success text-center";
-	$("#exampleModalCenter").modal('show');
-	
-	//add logic on the basis of loginType to redirect for login validation .
-	 var loginUrl=baseUrlForLogin;
+	var mainUrl=baseUrl;
 	if (loginType === "Admin Login") {
-		loginUrl +=   "adminLogin";
+		mainUrl +=   "admin/";
 	} else {
-		loginUrl +=  "userLogin";
+		mainUrl +=  "user/";
 	}
-		setTimeout(() => {
+	
+	var urlForSession=baseUrl+"setSession";
+	const userName=document.getElementById("emailId").value.trim();
+	const options={
+		method:"POST",
+		headers: {
+			'Content-type':'application/json',
+			'Accept-type':'application/json'
+		},
+		body:JSON.stringify({
+			userName:userName
+		})
+	};
+	
+	const response=await fetch(urlForSession,options);
+	if(response.status!=200){
+		modalPopup.children[0].childNodes[1].childNodes[3].innerText = "Internal Server Error...";
+		modalPopup.children[0].childNodes[1].childNodes[3].classList="text-danger text-center";
+		$("#exampleModalCenter").modal('show');
+		loaderOverlay.classList.add("d-none");
+	}else{
+		loaderOverlay.classList.add("d-none");
+		window.location.href = mainUrl +"dashboard";
+	}
+		/*setTimeout(() => {
 			//Add link redirect to home page
 			  loaderOverlay.classList.add("d-none");
-	          window.location.href = loginUrl;
+	          window.location.href = mainUrl +"dashboard";
 			   }
-			 , 5000); // Redirect after 2 seconds
+		 , 3000); // Redirect after 2 seconds*/
 }
 
 

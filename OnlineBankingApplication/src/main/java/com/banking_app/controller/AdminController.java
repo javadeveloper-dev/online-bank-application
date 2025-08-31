@@ -19,6 +19,7 @@ import com.banking_app.service.IAdminRegistrationService;
 import com.banking_app.util.LoginUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -40,7 +41,7 @@ public class AdminController {
 		 return "adminRegister";
 	}
 	
-	@PostMapping(value = "saveAdminRegistration",consumes=org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
+	@PostMapping(value = "saveAdminRegistrationData",consumes=org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE)
 	public ResponseEntity<String> saveAdminRegistrationDetail(@ModelAttribute AdminDTO adminRegistrationData,ModelMap modelMap,HttpServletRequest request) throws IOException {
 		try {
 		log.info("Executing saveAdminRegistrationDetail() Handler Method........");
@@ -53,5 +54,20 @@ public class AdminController {
 //		modelMap.addAttribute("adminRegisterDTO",saveAdminRegistrationDetail);
 		modelMap.addAttribute("adminName", adminRegistrationData.getFirstName());
 		return ResponseEntity.ok(adminRegistrationData.getFirstName());
+		
 	}
+	
+	@GetMapping("dashboard")
+	public String adminDashboard(Model model,HttpServletRequest request,HttpSession session) {
+		log.info("adminDashboard() handler method called...");
+		model.addAttribute("title", "Online Banking Application");
+		String fullUrl = request.getRequestURL().toString();
+		log.info("Curruent Session"+request.getSession().getAttribute("userName"));
+		session.setAttribute("userName", request.getSession().getAttribute("userName"));
+		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
+		model.addAttribute("baseUrlForAdmin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
+		model.addAttribute("userName", session);
+		return "loadDashboard";
+	}
+	
 }

@@ -9,6 +9,7 @@ public class OnlineBankingApplicationConfiguration implements WebMvcConfigurer {
 
 	public void addViewController(ViewControllerRegistry registry) {
 		registry.addViewController("/onlinebankapplication/welcome").setViewName("index");
+		
 	}
 	
 }

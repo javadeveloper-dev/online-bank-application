@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.banking_app.dao.IAdminRegisterDAO;
@@ -20,6 +21,9 @@ public class AdminRegistrationServiceImpl implements IAdminRegistrationService {
 	private IAdminRegisterDAO entityManagerFactory;
 	
 	public String email;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 	
 	@Autowired
 	private ModelMapper mapper;
@@ -41,6 +45,7 @@ public class AdminRegistrationServiceImpl implements IAdminRegistrationService {
 		Admin admin=mapper.map(adminDTO, Admin.class);
 		admin.setProfilePhoto(byteArrayFrombyteArray);
 		admin.setDateOfBirth(dateOfBirth);
+		admin.setPassword(passwordEncoder.encode(adminDTO.getPassword()));
 		Admin savedAdminEntity = entityManagerFactory.save(admin);
 		AdminDTO savedAdminDTO=mapper.map(savedAdminEntity, AdminDTO.class);
 		return savedAdminDTO;

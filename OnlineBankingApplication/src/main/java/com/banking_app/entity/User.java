@@ -49,8 +49,8 @@ public class User {
 	@Column(name = "account_no", length = 12)
 	private String accountNumber;
 
-	@Column(name = "role", length = 5)
-	private String role;
+	@Column(name = "role", length = 10)
+	private String role="ROLE_USER";
 
 	@Column(name = "date_of_birth" )
 	private Date dateOfBirth;
