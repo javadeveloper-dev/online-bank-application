@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th="http//www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+       <title th:text="${title}"></title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+          <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+          <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+         <link rel="stylesheet" th:href="@{'/css/login.css'}">
+      </head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: cornflowerblue;">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">
+          <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" fill="currentColor" class="bi bi-bank"
+            style="margin-right: 10px;" viewBox="0 0 16 16">
+            <path
+              d="m8 0 6.61 3h.89a.5.5 0 0 1 .5.5v2a.5.5 0 0 1-.5.5H15v7a.5.5 0 0 1 .485.38l.5 2a.498.498 0 0 1-.485.62H.5a.498.498 0 0 1-.485-.62l.5-2A.5.5 0 0 1 1 13V6H.5a.5.5 0 0 1-.5-.5v-2A.5.5 0 0 1 .5 3h.89zM3.777 3h8.447L8 1zM2 6v7h1V6zm2 0v7h2.5V6zm3.5 0v7h1V6zm2 0v7H12V6zM13 6v7h1V6zm2-1V4H1v1zm-.39 9H1.39l-.25 1h13.72z" />
+          </svg>
+          Online Banking System
+        </a>
+  
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+  
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+              <a class="nav-link text-white" href="#">Account</a>
+            </li>
+            <li class="nav-item dropdown">
+                <button class="btn  dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="true">
+                Finances
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" href="#">Withdrawls</a></li>
+                  <li><a class="dropdown-item" href="#">Deposite</a></li>
+                  <li><a class="dropdown-item" href="#">Transfer</a></li>
+                </ul>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link text-white" href="#">Activate/Deactivate Account</a>
+              </li>
+          </ul>
+          <ul class="navbar-nav">
+              <li class="nav-item ml-auto">
+                <h3 class="nav-link text-white" th:text="${'Hi   '+session.userName}"></h3> 
+              </li>
+          
+          </ul>
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+              <a class="nav-link text-white" th:href="@{${baseUrl}+logout}">Logout</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  <form method="post" return onsubmit="validateRegisrationForm(this,event);" enctype="multipart/form-data">
+    <div class="container mt-5">
+        <div class="row g-4 justify-content-center text-center">
+      
+          <div class="col-md-4">
+            <div class="card shadow bg-primary text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Users</h5>
+                <h4 class="card-text" id="totalUsers">120</h4>
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-4">
+            <div class="card shadow bg-success text-white">
+              <div class="card-body">
+                <h5 class="card-title">Active Users</h5>
+                <h4 class="card-text" id="activeUsers">85</h4>
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-4">
+            <div class="card shadow bg-info text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Deposits</h5>
+                <h4 class="card-text" id="totalDeposits">₹1,25,000</h4>
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-4">
+            <div class="card shadow bg-warning text-dark">
+              <div class="card-body">
+                <h5 class="card-title">Total Withdrawals</h5>
+                <h4 class="card-text" id="totalWithdrawals">₹85,000</h4>
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-4">
+            <div class="card shadow bg-secondary text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Transfers</h5>
+                <h4 class="card-text" id="totalTransfers">₹40,000</h4>
+              </div>
+            </div>
+          </div>
+      
+          <div class="col-md-4">
+            <div class="card shadow bg-dark text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Balance</h5>
+                <h4 class="card-text" id="totalBalance">₹2,50,000</h4>
+              </div>
+            </div>
+          </div>
+      
+        </div>
+      </div>
+      
+      
+</form>
+  </body>
+  <script th:src=@{'/js/common.js'}></script> 
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+
+</html>
