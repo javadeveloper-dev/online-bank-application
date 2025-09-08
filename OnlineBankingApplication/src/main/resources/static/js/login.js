@@ -19,6 +19,8 @@ if(document.getElementById("loginType")!==null){
 async function validateEmailForLogin(emailElement,event) {
 	//event.preventDefault();
     // Show loader and blur background
+	const token = document.querySelector('meta[name="_csrf"]').content;
+	const header = document.querySelector('meta[name="_csrf_header"]').content;
     loaderOverlay.classList.remove("d-none");
 	const regexForEmail = /^[a-zA-Z0-9.]{1,64}@[a-zA-Z]{1,253}\.[a-zA-Z]{2,}$/;
 	let email = emailElement.value.trim();
@@ -51,7 +53,8 @@ async function validateEmailForLogin(emailElement,event) {
 		method: 'POST',
 		headers: {
 			'Content-Type': 'application/json',
-			'Accept': 'application/json'
+			'Accept': 'application/json',
+			[header]: token
 		},
 		body: JSON.stringify({
 			email: encryptedData.cipherText,
@@ -88,9 +91,12 @@ async function validateEmailForLogin(emailElement,event) {
 
 
 async function validatePasswordForLogin(passwordElement) {	
+	
 	if(isPasswordValidateElement.value==="true"){
 		return;
 	}
+	const token = document.querySelector('meta[name="_csrf"]').content;
+	const header = document.querySelector('meta[name="_csrf_header"]').content;
 	const regexForPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[~!@#$%^&*()<>:]).{6,12}$/
 	let password = passwordElement.value.trim();
 	let validatePassword = document.getElementById("validatePassword");
@@ -169,7 +175,8 @@ async function validatePasswordForLogin(passwordElement) {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
-				'Accept': 'application/json'
+				'Accept': 'application/json',
+				[header]: token
 			},
 			body: JSON.stringify({
 				password: encryptedData.cipherText,
@@ -259,6 +266,8 @@ function validateCaptcha(captchaId){
 
 
 async function login(event){
+	const token = document.querySelector('meta[name="_csrf"]').content;
+	const header = document.querySelector('meta[name="_csrf_header"]').content;
 	event.preventDefault();
 	const loginType= document.getElementById("loginType").innerText;
     loaderOverlay.classList.remove("d-none");
@@ -290,19 +299,23 @@ async function login(event){
 	if (loginType === "Admin Login") {
 		mainUrl +=   "admin/";
 	} else {
-		mainUrl +=  "user/";
+		mainUrl +=  "user/"
 	}
 	
 	var urlForSession=baseUrl+"setSession";
 	const userName=document.getElementById("emailId").value.trim();
+	const password=document.getElementById("passwordId").value.trim();
 	const options={
 		method:"POST",
 		headers: {
 			'Content-type':'application/json',
-			'Accept-type':'application/json'
+			'Accept-type':'application/json',
+			[header]: token
 		},
+		credentials: "include",
 		body:JSON.stringify({
-			userName:userName
+			userName:userName,
+			password:password,
 		})
 	};
 	

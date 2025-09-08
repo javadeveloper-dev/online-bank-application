@@ -310,11 +310,14 @@ async function saveRegistrationForm(formBody, event) {
 async function validateFieldAlreadyExists(fieldValue, fieldName, variableName) {
 	try {
 		var baseUrl = document.getElementById("baseUrl").value;
+		const registrationType = document.getElementById("registrationType").innerHTML.trim();
 		var mainUrl;
 		if (registrationType === "Admin Registration") {
-			mainUrl = `${baseUrl}+'validateAdmin/'+is${fieldName}AlreadyExists?${variableName}=${fieldValue}`;
-		} else {
-			mainUrl = `${baseUrl}+'validateUser/'+is${fieldName}AlreadyExists?${variableName}=${fieldValue}`;
+		//	mainUrl = `${baseUrl}validateAdmin/is${fieldName}AlreadyExists?${variableName}=${fieldValue}`;
+		mainUrl = `${baseUrl}validateAdmin/is${fieldName}AlreadyExists?${variableName}=${fieldValue}`;
+} else {
+	
+			mainUrl = `${baseUrl}validateUser/is${fieldName}AlreadyExists?${variableName}=${fieldValue}`;
 		}
 		const response = fetch(mainUrl, {
 			method: 'GET',

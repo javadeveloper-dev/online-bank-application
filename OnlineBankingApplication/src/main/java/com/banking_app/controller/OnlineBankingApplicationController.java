@@ -1,18 +1,15 @@
 package com.banking_app.controller;
 
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
 import java.util.Map;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,8 +18,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.banking_app.dto.AdminDTO;
-import com.banking_app.service.IAdminRegistrationService;
-import com.banking_app.util.EncryptUtil;
 import com.banking_app.util.LoginUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -35,6 +30,9 @@ import lombok.extern.slf4j.Slf4j;
 public class OnlineBankingApplicationController {
 	
 	public static String userNameForSession;
+	
+	@Autowired
+	private AuthenticationManager authenticationManager;
 
 	@GetMapping("welcome")
 	public String welComePage(Model model,HttpServletRequest request) {
@@ -49,14 +47,26 @@ public class OnlineBankingApplicationController {
 	}
 	
 	@PostMapping("setSession")
-	public ResponseEntity<String> setSession(@RequestBody Map<String,String> requestData,Model model,HttpSession session)  {
+	public ResponseEntity<String> setSession(@RequestBody Map<String,String> requestData,Model model,HttpServletRequest request)  {
 		ResponseEntity<String> responseEntity;
 		try {
 		String userName = requestData.get("userName");
+		String password = requestData.get("password");
+		
+		UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userName, password);
+		
+		Authentication authentication=authenticationManager.authenticate(authenticationToken);
+		
+		SecurityContext securityContext=SecurityContextHolder.getContext();
+		securityContext.setAuthentication(authentication);
+		
+		HttpSession session=request.getSession(true);
+		session.setAttribute("SPRING_SECURITY_CONTEXT",securityContext);
+		
 		session.setAttribute("userName", userName);
 		responseEntity=new ResponseEntity<String>("Session Set Successfully..",HttpStatus.OK);
 	}catch(Exception e) {
-		responseEntity=new ResponseEntity<String>(e.getMessage(),HttpStatus.INTERNAL_SERVER_ERROR);
+		responseEntity=new ResponseEntity<String>(e.getMessage(),HttpStatus.UNAUTHORIZED);
 	}
 		return responseEntity;
 	}

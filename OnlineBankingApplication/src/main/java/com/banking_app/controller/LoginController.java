@@ -65,7 +65,6 @@ public class LoginController {
 	
 	private String loginType;
 	
-
 	@CrossOrigin(origins = "*")
 	@PostMapping(value = "isEmailPresentForLogin" , consumes = org.springframework.http.MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<String> isEmailPresentForLogin(@RequestBody Map<String, String> requestData)

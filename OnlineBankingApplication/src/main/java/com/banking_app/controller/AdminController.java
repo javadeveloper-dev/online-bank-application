@@ -70,4 +70,24 @@ public class AdminController {
 		return "loadDashboard";
 	}
 	
+	@GetMapping({"withdraw","deposite","transfer"})
+	public String loadFinancesPage(Model model,HttpServletRequest request,HttpSession session) {
+		log.info("loadFinancesPage() handler method called...");
+		model.addAttribute("title", "Online Banking Application");
+		String fullUrl = request.getRequestURL().toString();
+		log.info("Curruent Session"+request.getSession().getAttribute("userName"));
+		session.setAttribute("userName", request.getSession().getAttribute("userName"));
+		model.addAttribute("baseUrl", LoginUtil.getBaseUrl(fullUrl));
+		model.addAttribute("baseUrlForAdmin", LoginUtil.getBaseUrlFromLastSlash(fullUrl));
+		model.addAttribute("userName", session);
+		model.addAttribute("loginType","Admin");
+		if(fullUrl.contains("withdraw")) {
+			model.addAttribute("financeType", "Withdraw");
+		}else if(fullUrl.contains("deposit")) {
+		   	model.addAttribute("financeType", "Deposit");
+		}else if(fullUrl.contains("transfer")) {
+			model.addAttribute("financeType", "Transfer");
+		}
+		return "loadFinances";
+	}
 }
