@@ -17,5 +17,8 @@ public interface IAdminRegisterDAO extends JpaRepository<Admin, Integer> {
 
 	@Query("Select case when count(adminAlias)>0 then true else false End from Admin as adminAlias where adminAlias.mobileNo =:mobileNo")
 	Boolean existsByMobileNo(@Param("mobileNo") String mobileNo);
+	
+	@Query("Select  adminAlias.id from Admin as adminAlias where adminAlias.email =:userName")
+	Integer getAdminIdByEmail(String userName);
 
 }

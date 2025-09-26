@@ -13,5 +13,7 @@ public interface IAdminRegistrationService {
 		public Boolean isAccountNoAlreadyExists(String accountNo);
 
 		public Boolean isMobileNoAlreadyExists(String mobileNo);
+		
+		public Integer getAdminIdByUserName(String userName);
 
 }

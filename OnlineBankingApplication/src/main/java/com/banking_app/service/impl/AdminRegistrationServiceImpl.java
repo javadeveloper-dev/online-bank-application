@@ -61,4 +61,9 @@ public class AdminRegistrationServiceImpl implements IAdminRegistrationService {
 		return entityManagerFactory.existsByMobileNo(mobileNo);
 	}
 
+	@Override
+	public Integer getAdminIdByUserName(String userName) {
+		return entityManagerFactory.getAdminIdByEmail(userName);
+	}
+
 }

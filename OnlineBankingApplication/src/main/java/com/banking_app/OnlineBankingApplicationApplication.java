@@ -10,10 +10,6 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @EnableJpaRepositories
 public class OnlineBankingApplicationApplication {
 	
-	@Bean
-	public ModelMapper mapper() {
-		return new ModelMapper();
-	}
 	public static void main(String[] args) {
 		SpringApplication.run(OnlineBankingApplicationApplication.class, args);
 	}

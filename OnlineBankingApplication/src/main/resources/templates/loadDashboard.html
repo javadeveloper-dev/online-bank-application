@@ -43,9 +43,19 @@ xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
                   <li><a class="dropdown-item" th:href="@{${baseUrlForAdmin}+'transfer'}">Transfer</a></li>
                 </ul>
               </li>
-              <li class="nav-item" sec:authorize="hasRole('ADMIN')">
-                <a class="nav-link text-white" th:href="@{${baseUrlForAdmin}+'activateOrDectivateAccount'}">Add Account</a>
+              
+               <li class="nav-item dropdown" sec:authorize="hasRole('ADMIN')">
+                <button class="btn  dropdown-toggle text-white" data-bs-toggle="dropdown" aria-expanded="true">
+                 Account
+                </button>
+                <ul class="dropdown-menu">
+                  <li><a class="dropdown-item" th:href="@{${baseUrlForAdmin}+'existingAccount'}">Existing Accounts</a></li>
+                  <li><a class="dropdown-item" th:href="@{${baseUrlForAdmin}+'addAccount'}">Add a New Accout</a></li>
+                </ul>
               </li>
+           <!--    <li class="nav-item" sec:authorize="hasRole('ADMIN')">
+                <a class="nav-link text-white" th:href="@{${baseUrlForAdmin}+'addAccount'}">Add Account</a>
+              </li> -->
               <li class="nav-item" sec:authorize="hasRole('ADMIN')">
                 <a class="nav-link text-white" th:href="@{${baseUrlForAdmin}+'activateOrDectivateAccount'}">Activate/Deactivate Account</a>
               </li>

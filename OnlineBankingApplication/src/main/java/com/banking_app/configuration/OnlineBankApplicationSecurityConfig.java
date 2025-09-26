@@ -55,7 +55,7 @@ public class OnlineBankApplicationSecurityConfig {
 				(requests) -> requests.
 				dispatcherTypeMatchers(DispatcherType.ERROR).permitAll()
 				.requestMatchers("/onlinebankapplication/admin/loadAdminRegister",
-					"onlinebankapplication/login/adminLogin","/onlinebankapplication/admin/saveAdminRegistrationData", 
+					"onlinebankapplication/login/adminLogin","/onlinebankapplication/admin/saveAdminRegistrationData","/onlinebankapplication/admin/saveAddAccountData", 
 						"/error").permitAll().anyRequest().hasRole("ADMIN"))
 				
 		        .formLogin(form -> form.loginPage("/onlinebankapplication/welcome")

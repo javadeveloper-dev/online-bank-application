@@ -10,17 +10,30 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
+import java.util.Collection;
 import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.banking_app.constants.LoginConstants;
 
 public class CommonUtil {
+	
+	public CommonUtil() {
 		
+	}
+	@Autowired(required=true)	
+	public  ModelMapper modelMapper;
+
 	public static Byte[] getByteArrayFrombyteArray(byte[] byteArray) {
 		return java.util.stream.IntStream.range(0,byteArray.length).mapToObj(i->byteArray[i]).toArray(Byte[]::new);
 	}
+	
+	
+
 	
 	public static Date convertStringDateIntoSQLDate(String date) {
 		DateTimeFormatter formatter=DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -68,4 +81,10 @@ public class CommonUtil {
 		return otpBuffer.toString();
 	}
 	
+	public <S, T, C extends Collection<T>> C mapCollection(Collection<S> source, Class<T> targetClass, C targetCollection) {
+	    for (S item : source) {
+	        targetCollection.add(modelMapper.map(item, targetClass));
+	    }
+	    return targetCollection;
+	}
 }
